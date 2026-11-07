@@ -22,9 +22,17 @@ How the split is drawn (Prit chose option B, session 18):
 
 The same file and the same seed give the same split on any machine; `python -m eval.split` on the
 committed file says whether the split in it is exactly that draw. tests/test_split.py pins the dev list.
+
+Labels may be corrected after the split (session 24, after the blind re-label), and a question never
+changes split. So the rules are checked against the labels as they were when the split was drawn:
+eval/split_labels.json holds them (persona, type, decline or not, category, uncertain, tool expected),
+written once in session 24 and never edited. `as_drawn()` restores those fields; the seeded draw on
+them must still give the committed split (tested), and `python -m eval.split` lists every label
+changed since.
 """
 from __future__ import annotations
 
+import json
 import math
 import random
 import re
@@ -41,6 +49,44 @@ PINNED_DEV = tuple(f"q{n:03d}" for n in range(1, 11))   # batch 1: answers alrea
 TOOL_IN_DEV = (5, 6)                                     # of the 14 questions expecting the tool
 CEILING_OVERRIDE = {"unauthorized": 3}                   # batch 1 holds 3 of the 5
 MAX_DRAWS = 100_000
+
+
+DRAWN_FILE = G.REPO / "eval" / "split_labels.json"
+DRAWN_FIELDS = ("persona", "type", "should_abstain", "abstain_category", "uncertain")
+
+
+def drawn_labels(path: Path = DRAWN_FILE) -> dict[str, dict]:
+    return json.loads(path.read_text(encoding="utf-8"))["items"] if path.exists() else {}
+
+
+def as_drawn(items: list[G.GoldenItem], path: Path = DRAWN_FILE) -> list[G.GoldenItem]:
+    """The items with the fields the balance rules read set back to their values when the split was
+    drawn. A question not in the snapshot is left as it is."""
+    snap, out = drawn_labels(path), []
+    for i in items:
+        s = snap.get(i.id)
+        if s is None:
+            out.append(i)
+            continue
+        upd = {f: s[f] for f in DRAWN_FIELDS}
+        if s["tool"] != (i.expected_tool_call is not None):
+            upd["expected_tool_call"] = G.ToolCall(name="dispute_timeline", args={}) if s["tool"] else None
+            upd["expected_result"] = None
+        out.append(i.model_copy(update=upd))
+    return out
+
+
+def label_changes(items: list[G.GoldenItem], path: Path = DRAWN_FILE) -> list[str]:
+    """One line per field the balance rules read that differs from the split-time snapshot."""
+    snap, lines = drawn_labels(path), []
+    for i in items:
+        s = snap.get(i.id)
+        if s is None:
+            continue
+        now = {f: getattr(i, f) for f in DRAWN_FIELDS} | {"tool": i.expected_tool_call is not None}
+        now["should_abstain"] = bool(now["should_abstain"])
+        lines += [f"{i.id} {f}: {s[f]} -> {now[f]}" for f in (*DRAWN_FIELDS, "tool") if s[f] != now[f]]
+    return lines
 
 
 def group(item: G.GoldenItem) -> tuple[str, str]:
@@ -191,20 +237,25 @@ def main(argv=None) -> int:
     ap.add_argument("--write", action="store_true", help="write the split into the file (once)")
     args = ap.parse_args(argv)
     items = G.load(args.path)
+    split_exists = any(i.split for i in items)
     try:
-        dev, n = draw(items)
+        dev, n = draw(as_drawn(items) if split_exists else items)
     except ValueError as e:
         print(e)
         return 1
-    print(f"Seed {SEED}, draw {n} of the sequence: the first that meets the balance rules.\n")
+    print(f"Seed {SEED}, draw {n} of the sequence: the first that meets the balance rules"
+          + (" (on the labels as they were when the split was drawn, eval/split_labels.json)" if split_exists else "")
+          + ".\n")
     print(spread(items, dev))
     print("\ndev: " + " ".join(sorted(dev)))
     committed = {i.id for i in items if i.split == "dev"}
-    if any(i.split for i in items):
+    if split_exists:
         same = committed == dev and all(i.split for i in items)
         print("\nThe split in the file is " + ("exactly this draw." if same else "NOT this draw; it stays as "
-              "committed (a split never changes), but find out why: did a label's persona, type, category "
-              "or tool call change?"))
+              "committed (a split never changes), but find out why: was eval/split_labels.json or a split edited?"))
+        changes = label_changes(items)
+        print("\nLabels changed since the split (the split stays; the table above shows today's labels): "
+              + ("none" if not changes else "\n  " + "\n  ".join(changes)))
         if args.write:
             print("\n--write: nothing written, the file already has a split.")
             return 1

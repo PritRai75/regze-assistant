@@ -20,6 +20,13 @@ def items():
     return G.load()
 
 
+@pytest.fixture(scope="module")
+def drawn(items):
+    """The labels as they were when the split was drawn (eval/split_labels.json, session 24): labels may
+    be corrected later, and the balance rules judge the split against the labels it was drawn from."""
+    return S.as_drawn(items)
+
+
 # ------------------------------------------------------------------ the committed split
 
 def test_every_question_has_its_frozen_split(items):
@@ -28,52 +35,78 @@ def test_every_question_has_its_frozen_split(items):
     assert sum(i.split == "test" for i in items) == len(items) - len(FROZEN_DEV) == 36
 
 
-def test_committed_split_meets_the_rules(items):
-    assert S.rule_problems(items, FROZEN_DEV) == []
+def test_committed_split_meets_the_rules(drawn):
+    assert S.rule_problems(drawn, FROZEN_DEV) == []
     assert set(S.PINNED_DEV) <= FROZEN_DEV                           # batch 1 is all in dev
 
 
-def test_the_seeded_draw_gives_the_committed_split(items):
-    """Anyone can re-draw the split from the file and the seed. If a later label change (persona,
-    type, decline category or tool call) breaks only this test, the split still stays as committed:
-    check the change was meant, then compare against the file at the split commit instead."""
-    dev, _ = S.draw(items)
+def test_the_seeded_draw_gives_the_committed_split(drawn):
+    """Anyone can re-draw the split from the seed and the split-time labels (eval/split_labels.json).
+    This is also what proves the snapshot holds the labels the split was really drawn from."""
+    dev, _ = S.draw(drawn)
     assert dev == FROZEN_DEV
+
+
+def test_snapshot_covers_every_question(items):
+    snap = S.drawn_labels()
+    assert set(snap) == {i.id for i in items}
+    assert all(set(v) == {*S.DRAWN_FIELDS, "tool"} for v in snap.values())
+
+
+def test_a_corrected_label_never_moves_the_split(items):
+    """Session 24's kind of correction: a test question's type changes after the split."""
+    fixed = [i.model_copy(update={"type": {"q012": "deadline", "q022": "cross_reg"}[i.id]})
+             if i.id in ("q012", "q022") else i for i in items]
+    fixed = [i.model_copy(update={"expected_tool_call": None, "expected_result": None}) if i.id == "q012" else i
+             for i in fixed]                                                  # and a tool call dropped
+    changes = S.label_changes(fixed)
+    assert [c for c in changes if c.startswith("q012 type")] and [c for c in changes if c.startswith("q022 type")]
+    assert "q012 tool: True -> False" in changes
+    again = S.as_drawn(fixed)
+    assert S.rule_problems(again, FROZEN_DEV) == [] and S.draw(again)[0] == FROZEN_DEV
+    assert [i.model_dump(include={"type", "persona", "abstain_category"}) for i in again] == \
+           [i.model_dump(include={"type", "persona", "abstain_category"}) for i in S.as_drawn(items)]
 
 
 # ------------------------------------------------------------------ the rules
 
-def test_rules_catch_a_moved_question(items):
+def test_rules_catch_a_moved_question(drawn):
     moved = (FROZEN_DEV - {"q053"}) | {"q013"}                      # compliance dispute for compliance dispute: fine
-    assert S.rule_problems(items, moved) == []
+    assert S.rule_problems(drawn, moved) == []
     unbalanced = (FROZEN_DEV - {"q024"}) | {"q033"}                 # a decline out, an answerable in
-    problems = S.rule_problems(items, unbalanced)
+    problems = S.rule_problems(drawn, unbalanced)
     assert any("group answerable/frontline" in p for p in problems)
     assert any("group decline/frontline" in p for p in problems)
 
 
-def test_rules_need_each_category_in_both_splits(items):
+def test_rules_need_each_category_in_both_splits(drawn):
     no_sign_off = (FROZEN_DEV - {"q028"}) | {"q058"}               # q058 (sign_off, compliance) into dev, q028 out
-    assert S.rule_problems(items, no_sign_off) == []               # one sign_off still on each side
+    assert S.rule_problems(drawn, no_sign_off) == []               # one sign_off still on each side
     both = FROZEN_DEV | {"q058"}
-    assert any(p.startswith("sign_off: 2 of 2") for p in S.rule_problems(items, both))
+    assert any(p.startswith("sign_off: 2 of 2") for p in S.rule_problems(drawn, both))
 
 
-def test_draw_is_deterministic_and_seed_dependent(items):
-    a, n = S.draw(items)
-    b, m = S.draw(items)
+def test_draw_is_deterministic_and_seed_dependent(drawn):
+    a, n = S.draw(drawn)
+    b, m = S.draw(drawn)
     assert (a, n) == (b, m)
-    c, _ = S.draw(items, seed=S.SEED + 1)
-    assert S.rule_problems(items, c) == [] and c != a
+    c, _ = S.draw(drawn, seed=S.SEED + 1)
+    assert S.rule_problems(drawn, c) == [] and c != a
 
 
-def test_draw_refuses_drafts_and_uncertain(items):
-    draft = items[0].model_copy(update={"stage": "draft"})
+def test_draw_refuses_drafts_and_uncertain(drawn):
+    draft = drawn[0].model_copy(update={"stage": "draft"})
     with pytest.raises(ValueError, match="still a draft"):
-        S.draw([draft] + items[1:])
-    unsure = items[0].model_copy(update={"uncertain": True})
+        S.draw([draft] + drawn[1:])
+    unsure = drawn[0].model_copy(update={"uncertain": True})
     with pytest.raises(ValueError, match="uncertain"):
-        S.draw([unsure] + items[1:])
+        S.draw([unsure] + drawn[1:])
+
+
+def test_a_question_marked_uncertain_later_keeps_its_split(items):
+    later = [i.model_copy(update={"uncertain": True}) if i.id == "q014" else i for i in items]
+    assert "q014 uncertain: False -> True" in S.label_changes(later)
+    assert S.draw(S.as_drawn(later))[0] == FROZEN_DEV
 
 
 # ------------------------------------------------------------------ writing the field
@@ -136,7 +169,8 @@ def test_write_refuses_on_the_committed_file(tmp_path, capsys):
 
 def test_preview_says_the_file_holds_exactly_this_draw(capsys):
     assert S.main([]) == 0
-    assert "exactly this draw" in capsys.readouterr().out
+    out = capsys.readouterr().out
+    assert "exactly this draw" in out and "Labels changed since the split" in out
 
 
 # ------------------------------------------------------------------ the checker

@@ -1,0 +1,485 @@
+{
+ "note": "The labels the balance rules read, as they were when the split was drawn (session 18, seed 20261105; taken from commit fc7d5d9, whose labels give exactly that draw). Written once in session 24 so later label corrections never look like a moved split. Never edit.",
+ "items": {
+  "q001": {
+   "persona": "frontline",
+   "type": "unauthorized",
+   "should_abstain": false,
+   "abstain_category": null,
+   "uncertain": false,
+   "tool": true
+  },
+  "q002": {
+   "persona": "frontline",
+   "type": "unauthorized",
+   "should_abstain": false,
+   "abstain_category": null,
+   "uncertain": false,
+   "tool": true
+  },
+  "q003": {
+   "persona": "frontline",
+   "type": "dispute",
+   "should_abstain": false,
+   "abstain_category": null,
+   "uncertain": false,
+   "tool": true
+  },
+  "q004": {
+   "persona": "compliance",
+   "type": "deadline",
+   "should_abstain": false,
+   "abstain_category": null,
+   "uncertain": false,
+   "tool": true
+  },
+  "q005": {
+   "persona": "compliance",
+   "type": "fees_terms",
+   "should_abstain": false,
+   "abstain_category": null,
+   "uncertain": false,
+   "tool": false
+  },
+  "q006": {
+   "persona": "frontline",
+   "type": "payments_disclosures",
+   "should_abstain": false,
+   "abstain_category": null,
+   "uncertain": false,
+   "tool": false
+  },
+  "q007": {
+   "persona": "compliance",
+   "type": "unauthorized",
+   "should_abstain": false,
+   "abstain_category": null,
+   "uncertain": false,
+   "tool": false
+  },
+  "q008": {
+   "persona": "frontline",
+   "type": "decline",
+   "should_abstain": true,
+   "abstain_category": "network_rules",
+   "uncertain": false,
+   "tool": false
+  },
+  "q009": {
+   "persona": "compliance",
+   "type": "decline",
+   "should_abstain": true,
+   "abstain_category": "other_law",
+   "uncertain": false,
+   "tool": false
+  },
+  "q010": {
+   "persona": "compliance",
+   "type": "decline",
+   "should_abstain": true,
+   "abstain_category": "excluded_part",
+   "uncertain": false,
+   "tool": false
+  },
+  "q011": {
+   "persona": "frontline",
+   "type": "unauthorized",
+   "should_abstain": false,
+   "abstain_category": null,
+   "uncertain": false,
+   "tool": false
+  },
+  "q012": {
+   "persona": "frontline",
+   "type": "dispute",
+   "should_abstain": false,
+   "abstain_category": null,
+   "uncertain": false,
+   "tool": true
+  },
+  "q013": {
+   "persona": "compliance",
+   "type": "dispute",
+   "should_abstain": false,
+   "abstain_category": null,
+   "uncertain": false,
+   "tool": false
+  },
+  "q014": {
+   "persona": "compliance",
+   "type": "deadline",
+   "should_abstain": false,
+   "abstain_category": null,
+   "uncertain": false,
+   "tool": true
+  },
+  "q015": {
+   "persona": "frontline",
+   "type": "fees_terms",
+   "should_abstain": false,
+   "abstain_category": null,
+   "uncertain": false,
+   "tool": false
+  },
+  "q016": {
+   "persona": "compliance",
+   "type": "fees_terms",
+   "should_abstain": false,
+   "abstain_category": null,
+   "uncertain": false,
+   "tool": false
+  },
+  "q017": {
+   "persona": "compliance",
+   "type": "payments_disclosures",
+   "should_abstain": false,
+   "abstain_category": null,
+   "uncertain": false,
+   "tool": false
+  },
+  "q018": {
+   "persona": "compliance",
+   "type": "payments_disclosures",
+   "should_abstain": false,
+   "abstain_category": null,
+   "uncertain": false,
+   "tool": false
+  },
+  "q019": {
+   "persona": "frontline",
+   "type": "reg_e_account",
+   "should_abstain": false,
+   "abstain_category": null,
+   "uncertain": false,
+   "tool": false
+  },
+  "q020": {
+   "persona": "frontline",
+   "type": "reg_e_account",
+   "should_abstain": false,
+   "abstain_category": null,
+   "uncertain": false,
+   "tool": false
+  },
+  "q021": {
+   "persona": "compliance",
+   "type": "reg_e_account",
+   "should_abstain": false,
+   "abstain_category": null,
+   "uncertain": false,
+   "tool": false
+  },
+  "q022": {
+   "persona": "compliance",
+   "type": "fees_terms",
+   "should_abstain": false,
+   "abstain_category": null,
+   "uncertain": false,
+   "tool": false
+  },
+  "q023": {
+   "persona": "frontline",
+   "type": "cross_reg",
+   "should_abstain": false,
+   "abstain_category": null,
+   "uncertain": false,
+   "tool": true
+  },
+  "q024": {
+   "persona": "frontline",
+   "type": "decline",
+   "should_abstain": true,
+   "abstain_category": "state_law",
+   "uncertain": false,
+   "tool": false
+  },
+  "q025": {
+   "persona": "frontline",
+   "type": "decline",
+   "should_abstain": true,
+   "abstain_category": "issuer_terms",
+   "uncertain": false,
+   "tool": false
+  },
+  "q026": {
+   "persona": "frontline",
+   "type": "decline",
+   "should_abstain": true,
+   "abstain_category": "not_in_force",
+   "uncertain": false,
+   "tool": false
+  },
+  "q027": {
+   "persona": "compliance",
+   "type": "reg_e_account",
+   "should_abstain": false,
+   "abstain_category": null,
+   "uncertain": false,
+   "tool": false
+  },
+  "q028": {
+   "persona": "compliance",
+   "type": "decline",
+   "should_abstain": true,
+   "abstain_category": "sign_off",
+   "uncertain": false,
+   "tool": false
+  },
+  "q029": {
+   "persona": "frontline",
+   "type": "decline",
+   "should_abstain": true,
+   "abstain_category": "excluded_part",
+   "uncertain": false,
+   "tool": false
+  },
+  "q030": {
+   "persona": "compliance",
+   "type": "decline",
+   "should_abstain": true,
+   "abstain_category": "other_law",
+   "uncertain": false,
+   "tool": false
+  },
+  "q031": {
+   "persona": "frontline",
+   "type": "deadline",
+   "should_abstain": false,
+   "abstain_category": null,
+   "uncertain": false,
+   "tool": true
+  },
+  "q032": {
+   "persona": "compliance",
+   "type": "deadline",
+   "should_abstain": false,
+   "abstain_category": null,
+   "uncertain": false,
+   "tool": true
+  },
+  "q033": {
+   "persona": "frontline",
+   "type": "dispute",
+   "should_abstain": false,
+   "abstain_category": null,
+   "uncertain": false,
+   "tool": false
+  },
+  "q034": {
+   "persona": "compliance",
+   "type": "deadline",
+   "should_abstain": false,
+   "abstain_category": null,
+   "uncertain": false,
+   "tool": true
+  },
+  "q035": {
+   "persona": "frontline",
+   "type": "payments_disclosures",
+   "should_abstain": false,
+   "abstain_category": null,
+   "uncertain": false,
+   "tool": false
+  },
+  "q036": {
+   "persona": "compliance",
+   "type": "cross_reg",
+   "should_abstain": false,
+   "abstain_category": null,
+   "uncertain": false,
+   "tool": true
+  },
+  "q037": {
+   "persona": "compliance",
+   "type": "cross_reg",
+   "should_abstain": false,
+   "abstain_category": null,
+   "uncertain": false,
+   "tool": false
+  },
+  "q038": {
+   "persona": "frontline",
+   "type": "fees_terms",
+   "should_abstain": false,
+   "abstain_category": null,
+   "uncertain": false,
+   "tool": false
+  },
+  "q039": {
+   "persona": "frontline",
+   "type": "reg_e_account",
+   "should_abstain": false,
+   "abstain_category": null,
+   "uncertain": false,
+   "tool": false
+  },
+  "q040": {
+   "persona": "frontline",
+   "type": "decline",
+   "should_abstain": true,
+   "abstain_category": "not_in_force",
+   "uncertain": false,
+   "tool": false
+  },
+  "q041": {
+   "persona": "compliance",
+   "type": "decline",
+   "should_abstain": true,
+   "abstain_category": "network_rules",
+   "uncertain": false,
+   "tool": false
+  },
+  "q042": {
+   "persona": "frontline",
+   "type": "decline",
+   "should_abstain": true,
+   "abstain_category": "issuer_terms",
+   "uncertain": false,
+   "tool": false
+  },
+  "q043": {
+   "persona": "compliance",
+   "type": "decline",
+   "should_abstain": true,
+   "abstain_category": "state_law",
+   "uncertain": false,
+   "tool": false
+  },
+  "q044": {
+   "persona": "compliance",
+   "type": "decline",
+   "should_abstain": true,
+   "abstain_category": "other_law",
+   "uncertain": false,
+   "tool": false
+  },
+  "q045": {
+   "persona": "frontline",
+   "type": "decline",
+   "should_abstain": true,
+   "abstain_category": "excluded_part",
+   "uncertain": false,
+   "tool": false
+  },
+  "q046": {
+   "persona": "frontline",
+   "type": "unauthorized",
+   "should_abstain": false,
+   "abstain_category": null,
+   "uncertain": false,
+   "tool": true
+  },
+  "q047": {
+   "persona": "compliance",
+   "type": "deadline",
+   "should_abstain": false,
+   "abstain_category": null,
+   "uncertain": false,
+   "tool": true
+  },
+  "q048": {
+   "persona": "frontline",
+   "type": "deadline",
+   "should_abstain": false,
+   "abstain_category": null,
+   "uncertain": false,
+   "tool": true
+  },
+  "q049": {
+   "persona": "compliance",
+   "type": "dispute",
+   "should_abstain": false,
+   "abstain_category": null,
+   "uncertain": false,
+   "tool": false
+  },
+  "q050": {
+   "persona": "frontline",
+   "type": "payments_disclosures",
+   "should_abstain": false,
+   "abstain_category": null,
+   "uncertain": false,
+   "tool": false
+  },
+  "q051": {
+   "persona": "compliance",
+   "type": "payments_disclosures",
+   "should_abstain": false,
+   "abstain_category": null,
+   "uncertain": false,
+   "tool": false
+  },
+  "q052": {
+   "persona": "frontline",
+   "type": "reg_e_account",
+   "should_abstain": false,
+   "abstain_category": null,
+   "uncertain": false,
+   "tool": false
+  },
+  "q053": {
+   "persona": "compliance",
+   "type": "dispute",
+   "should_abstain": false,
+   "abstain_category": null,
+   "uncertain": false,
+   "tool": false
+  },
+  "q054": {
+   "persona": "compliance",
+   "type": "fees_terms",
+   "should_abstain": false,
+   "abstain_category": null,
+   "uncertain": false,
+   "tool": false
+  },
+  "q055": {
+   "persona": "frontline",
+   "type": "reg_e_account",
+   "should_abstain": false,
+   "abstain_category": null,
+   "uncertain": false,
+   "tool": false
+  },
+  "q056": {
+   "persona": "compliance",
+   "type": "decline",
+   "should_abstain": true,
+   "abstain_category": "not_in_force",
+   "uncertain": false,
+   "tool": false
+  },
+  "q057": {
+   "persona": "frontline",
+   "type": "decline",
+   "should_abstain": true,
+   "abstain_category": "network_rules",
+   "uncertain": false,
+   "tool": false
+  },
+  "q058": {
+   "persona": "compliance",
+   "type": "decline",
+   "should_abstain": true,
+   "abstain_category": "sign_off",
+   "uncertain": false,
+   "tool": false
+  },
+  "q059": {
+   "persona": "frontline",
+   "type": "decline",
+   "should_abstain": true,
+   "abstain_category": "state_law",
+   "uncertain": false,
+   "tool": false
+  },
+  "q060": {
+   "persona": "compliance",
+   "type": "decline",
+   "should_abstain": true,
+   "abstain_category": "excluded_part",
+   "uncertain": false,
+   "tool": false
+  }
+ }
+}
