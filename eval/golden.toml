@@ -343,7 +343,7 @@ previously lent him the card once to buy groceries but did not authorize these l
 having lent him the card before affect how we treat the new transactions?
 """
 regulation = "Z"
-gold_ids = ["1026.12(b)(1)(i)", "1026.12(b)(1)(ii)-3"]
+gold_ids = ["1026.12(b)(1)(i)", "1026.12(b)(1)(ii)-1", "1026.12(b)(1)(ii)-3"]
 reference_answer = """
 Under Regulation Z, unauthorized use is defined as the use of a credit card by a person who lacks actual, implied, or apparent authority and from which the cardholder receives no benefit. If a cardholder furnishes a card to a person who exceeds the granted authority, the cardholder is liable unless the issuer was notified that authority was revoked. However, whether previously lending a card creates implied or apparent authority for later purchases when the card is taken without permission is determined under state law.
 """
@@ -358,7 +358,7 @@ id = "q012"
 split = "test"
 stage = "labelled"
 persona = "frontline"
-type = "dispute"
+type = "deadline"
 question = """
 A customer says a hotel charged her credit card $480 even though the agreed room rate was $280. The \
 $480 charge appears on her statement sent on 15 October 2026, and her written complaint reached our \
@@ -399,7 +399,7 @@ working seven days after purchase, and the store has refused to repair it, repla
 refund. Can the customer withhold payment through a credit-card billing dispute?
 """
 regulation = "Z"
-gold_ids = ["1026.12(c)(1)", "1026.12(c)(3)(i)", "1026.12(c)", "1026.13(a)(3)"]
+gold_ids = ["1026.12(c)(1)", "1026.12(c)(3)(i)", "1026.13(a)(3)"]
 reference_answer = """
 A quality dispute regarding accepted merchandise is not a billing error under Regulation Z (§ 1026.13(a)(3)), so the customer cannot withhold payment through a billing error dispute. However, under 12 CFR § 1026.12(c), the customer may withhold payment by asserting claims and defenses against the card issuer for a merchant dispute, provided she made a good-faith effort to resolve the issue with the store and the transaction amount exceeds $50.
 """
@@ -422,23 +422,23 @@ and she first notified our bank by telephone on 28 October 2026. What investigat
 deadlines apply?
 """
 regulation = "E"
-gold_ids = ["1005.11(c)(1)", "1005.11(c)(3)(ii)"]
+gold_ids = ["1005.11(c)(1)", "1005.11(c)(3)(i)", "1005.11(c)(3)(ii)"]
 reference_answer = """
-Under Regulation E, because the transaction was a foreign point-of-sale debit card transaction, extended investigation deadlines apply after receiving oral notice on 28 October 2026. The financial institution must investigate and determine whether an error occurred, or provisionally credit the account, within 10 business days (by Thursday, 12 November 2026). The complete investigation must be finished within 90 calendar days (by Tuesday, 26 January 2027).
+Under Regulation E, the account was opened on 1 October 2026, so the 20 October purchase was made within 30 days after the first deposit and the new-account time limits apply to the error the customer reported orally on 28 October 2026. The financial institution must determine whether an error occurred, or provisionally credit the account, within 20 business days (by Friday, 27 November 2026). The complete investigation must be finished within 90 calendar days (by Tuesday, 26 January 2027), a period that the foreign point-of-sale debit card transaction would also qualify for.
 """
 key_facts = [
-  "investigate or provisionally credit within 10 business days (12 November 2026)",
+  "investigate or provisionally credit within 20 business days because the account is new (27 November 2026)",
   "complete investigation within 90 calendar days (26 January 2027)"
 ]
 should_abstain = false
 
 [question.expected_tool_call]
 name = "dispute_timeline"
-args = { regulation = "E", event = "error", notice_date = "2026-10-28", transfer_kind = "foreign" }
+args = { regulation = "E", event = "error", notice_date = "2026-10-28", transfer_kind = "foreign", first_deposit = "2026-10-01", transfer_date = "2026-10-20" }
 
 [question.expected_result]
 deadlines = [
-  { what = "10-business-day provisional credit or investigation determination", date = 2026-11-12, rule = "1005.11(c)(1)" },
+  { what = "20-business-day provisional credit or investigation determination (new account)", date = 2026-11-27, rule = "1005.11(c)(3)(i)" },
   { what = "90-calendar-day complete investigation", date = 2027-01-26, rule = "1005.11(c)(3)(ii)" }
 ]
 
@@ -454,14 +454,14 @@ $75 program fee and a $25 card-replacement fee during the first month. She wants
 bank is allowed to charge these fees.
 """
 regulation = "Z"
-gold_ids = ["1026.52(a)(1)", "1026.52(a)(2)(ii)"]
+gold_ids = ["1026.52(a)(1)", "1026.52(a)(2)(ii)", "1026.52(a)(2)-4"]
 reference_answer = """
-Under Regulation Z (12 CFR § 1026.52(a)(1)), total non-exempt fees required for a credit card during the first year after account opening cannot exceed 25% of the initial credit limit ($125 for a $500 limit). The $95 annual fee and $75 program fee total $170, which exceeds the $125 maximum, so the bank cannot charge the full amount of these required fees and must credit or waive the excess. Optional fees, such as the $25 card-replacement fee, are exempt under § 1026.52(a)(2)(ii) from counting toward the 25% cap.
+Under Regulation Z (12 CFR § 1026.52(a)(1)), total non-exempt fees required for a credit card during the first year after account opening cannot exceed 25% of the initial credit limit ($125 for a $500 limit). The $95 annual fee and $75 program fee total $170, which exceeds the $125 maximum, so the bank cannot charge the full amount of these required fees and must credit or waive the excess. Fees the consumer is not required to pay are exempt under § 1026.52(a)(2)(ii), and the commentary gives a fee for reissuing a lost or stolen card as an example, so the $25 card-replacement fee counts toward the cap only if the bank required her to pay it.
 """
 key_facts = [
   "fees required in the first year cannot exceed 25% of the initial credit limit ($125 for a $500 limit)",
   "the required annual and program fees total $170, exceeding the 25% cap",
-  "optional fees like a card-replacement fee are exempt from the 25% first-year limit"
+  "fees the consumer is not required to pay, such as a fee for reissuing a lost or stolen card, are exempt from the 25% first-year limit"
 ]
 should_abstain = false
 
@@ -503,11 +503,11 @@ the system allocate the amount paid above the minimum between these two balances
 regulation = "Z"
 gold_ids = ["1026.53(a)"]
 reference_answer = """
-Under Regulation Z (12 CFR § 1026.53(a)), any amount paid by a consumer in excess of the required minimum periodic payment must be allocated first to the balance with the highest annual percentage rate. For a $500 payment with a $100 minimum payment, the excess payment is $400. Because the purchase balance carries a 24% APR and the balance-transfer balance carries a 0% APR, the system must allocate the entire $400 excess payment to the 24% purchase balance.
+Under Regulation Z (12 CFR § 1026.53(a)), any amount paid by a consumer in excess of the required minimum periodic payment must be allocated first to the balance with the highest annual percentage rate. For a $500 payment with a $100 minimum payment, the excess payment is $400. Because the purchase balance carries a 24% APR and the balance-transfer balance carries a 0% APR, the system must allocate the $400 excess payment first to the 24% purchase balance, and only any amount left after that balance is paid in full to the 0% balance-transfer balance.
 """
 key_facts = [
   "payments in excess of the minimum payment must be allocated first to the balance with the highest APR",
-  "the entire $400 excess payment must be allocated to the 24% purchase balance"
+  "the $400 excess goes first to the 24% purchase balance, and any remainder to the 0% balance-transfer balance"
 ]
 should_abstain = false
 
@@ -610,14 +610,14 @@ id = "q022"
 split = "test"
 stage = "labelled"
 persona = "compliance"
-type = "fees_terms"
+type = "cross_reg"
 question = """
 Our bank is developing a prepaid card that would allow customers to spend more than their available \
 prepaid balance through a linked credit feature. The credit feature would cover the negative \
 balance, and customers would repay the amount later. How is this product classified, and what \
 requirements apply to the linked credit feature?
 """
-regulation = "Z"
+regulation = "both"
 gold_ids = ["1026.61(a)(2)(i)", "1026.61(b)", "1026.61(c)(1)"]
 reference_answer = """
 The prepaid card is classified as a hybrid prepaid-credit card accessing a covered separate credit feature under Regulation Z (12 CFR § 1026.61(a)(2)(i)). Under § 1026.61(b), the credit feature cannot be structured as a negative balance on the asset account; it must be structured as a separate credit account or credit subaccount. Additionally, under § 1026.61(c)(1), the bank must wait at least 30 days after the prepaid account is registered before soliciting, offering, or opening the covered separate credit feature.
