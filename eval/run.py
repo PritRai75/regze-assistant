@@ -5,7 +5,9 @@ From the repo root:
     python -m eval.run --split unsplit           every labelled question (until the dev/test split exists)
     python -m eval.run --split dev               the dev split
     python -m eval.run --ids q001 q004           only these questions (any split)
-    python -m eval.run --split test --final      the test split: once, at the very end
+    python -m eval.run --split test --final      the test split: once, at the very end (refused, like any run
+                                                 of a test question, until the blind re-label is committed:
+                                                 eval/relabel.py, session 24)
     python -m eval.run --k 2 --tool-off          the dev split with weaker settings (judge calibration)
     python -m eval.run --prompt p3               the dev split with another prompt (experiment 4)
     python -m eval.run --tool-off --prompt p4    the tool off, the model counting days itself (experiment 3)
@@ -635,6 +637,11 @@ def main(argv=None) -> int:
         hint = " Questions without a split are run with --split unsplit." if args.split == "dev" and not args.ids else ""
         print(f"No labelled questions to run.{hint}")
         return 2
+    if any(i.split == "test" for i in items):        # session 24: the blind re-label comes first
+        from eval.relabel import final_block
+        if (why := final_block()):
+            print(f"Not run: {why}")
+            return 2
     changed = {k: v for k, v in (("k", args.k), ("tool_on", False if args.tool_off else None),
                                  ("search", args.search), ("prompt", args.prompt),
                                  ("interpretations", False if args.no_interpretations else None)) if v is not None}
