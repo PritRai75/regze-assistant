@@ -1,4 +1,5 @@
-# Everything in requirements.txt, plus the test runner.
+# Everything in requirements.txt, plus the test runner, the template tests' YAML reader and the MCP server.
 -r requirements.txt
+-r requirements-mcp.txt
 pytest==9.2.0
 pyyaml==6.0.3

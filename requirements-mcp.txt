@@ -1,0 +1,3 @@
+# The MCP server (mcp_server/), which runs on your own machine and calls the deployed API.
+# Not part of the Lambda package (deploy/stage.py copies only requirements.txt).
+mcp==2.3.0
