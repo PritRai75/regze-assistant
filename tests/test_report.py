@@ -577,3 +577,29 @@ def test_a_setting_missing_from_an_older_log_counts_as_its_default(db):
                (json.dumps({"search_mode": "hybrid", "k": 5, "tool_on": True, "interpretations": False}), RUN_B))
     c = P.compare(db, RUN, RUN_B, ix=IX)
     assert c["settings"] == [("interpretations", True, False)] and c["b"]["name"] == "hybrid k5 rules only"
+
+
+# ---------------------------------------------------------------- latency and cost (session 24)
+
+def test_cost_per_100_queries(db, tmp_path):
+    rep = P.build(db, RUN, ix=IX)
+    line = P.cost_line(rep)
+    # 6 questions ran, each 1,000 input and 100 output tokens: (6,000 x $3 + 600 x $15) / 1e6 / 6 x 100 = $0.45
+    assert "$0.45 per 100 queries" in line and "6,000 input and 600 output tokens over 6 questions" in line
+    assert "p50 4.0 s, p95 4.0 s" in line and "not yet confirmed against AWS" in line
+    assert line in P.text(rep) and line in P.markdown(rep)
+    other = tmp_path / "prices.json"
+    other.write_text(json.dumps({"confirmed": True, "usd_per_million_tokens": {
+        "global.anthropic.claude-sonnet-4-6": {"input": 6.0, "output": 30.0}}}), encoding="utf-8")
+    line = P.cost_line(rep, other)
+    assert "$0.90 per 100 queries" in line and "not yet confirmed" not in line
+    other.write_text(json.dumps({"usd_per_million_tokens": {}}), encoding="utf-8")
+    assert "no price on file for global.anthropic.claude-sonnet-4-6" in P.cost_line(rep, other)
+
+
+def test_prices_file_names_the_configured_models():
+    from app.config import DEFAULT
+    prices = json.loads(P.PRICES_FILE.read_text(encoding="utf-8"))
+    assert set(prices["usd_per_million_tokens"]) == {DEFAULT.generator_model, DEFAULT.judge_model}
+    assert all(set(v) == {"input", "output"} for v in prices["usd_per_million_tokens"].values())
+    assert isinstance(prices["confirmed"], bool) and prices["source"]

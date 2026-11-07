@@ -1,0 +1,9 @@
+{
+  "note": "On-demand prices in USD per million tokens, for cost per 100 queries in eval/report.py. Both models run through global inference profiles, so Bedrock's 10% regional premium doesn't apply. Set confirmed to true only after checking these against the AWS Bedrock pricing page or console (tracker ta-prices).",
+  "source": "Anthropic pricing page (platform.claude.com/docs/en/about-claude/pricing), Claude Sonnet 4.6 and 4.5 base prices; read by Claude on 2026-11-07",
+  "confirmed": false,
+  "usd_per_million_tokens": {
+    "global.anthropic.claude-sonnet-4-6": {"input": 3.0, "output": 15.0},
+    "global.anthropic.claude-sonnet-4-5-20250929-v1:0": {"input": 3.0, "output": 15.0}
+  }
+}

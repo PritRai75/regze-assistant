@@ -413,12 +413,39 @@ def header_lines(rep: dict) -> list[str]:
     return lines
 
 
+PRICES_FILE = R.REPO / "eval" / "prices.json"
+
+
+def cost_line(rep: dict, prices_file: Path = PRICES_FILE) -> str:
+    """Latency and cost per 100 queries for the answer model, from the run's logged tokens and eval/prices.json
+    (session 24). A setting missing from an older run's log counts as its default (decision 87)."""
+    from app.config import DEFAULT
+    o = rep["overall"]
+    sec = lambda ms: "-" if ms is None else f"{ms / 1000:.1f} s"  # noqa: E731
+    lat = f"Latency (answer, as run): p50 {sec(o['latency_p50_ms'])}, p95 {sec(o['latency_p95_ms'])}."
+    try:
+        model = json.loads(rep["run"].get("config_json") or "{}").get("generator_model", DEFAULT.generator_model)
+    except ValueError:
+        model = DEFAULT.generator_model
+    p = json.loads(prices_file.read_text(encoding="utf-8")) if prices_file.exists() else {}
+    price = p.get("usd_per_million_tokens", {}).get(model)
+    if not price or not o["n"]:
+        return f"{lat} Cost: no price on file for {model} (eval/prices.json)."
+    usd = (o["input_tokens"] * price["input"] + o["output_tokens"] * price["output"]) / 1e6
+    return (f"{lat} Cost: ${usd / o['n'] * 100:.2f} per 100 queries for the answer model ({o['input_tokens']:,} input "
+            f"and {o['output_tokens']:,} output tokens over {o['n']} questions at ${price['input']:g} / "
+            f"${price['output']:g} per million"
+            + ("" if p.get("confirmed") else "; prices not yet confirmed against AWS")
+            + "). The judge and the question embeddings aren't counted.")
+
+
 def notes_lines(rep: dict) -> list[str]:
     o = rep["overall"]
     lines = [f"* {CAVEAT}",
              f"  Judged {o['judged']}: faithful {o['faith_labels']['faithful']}, partially "
              f"{o['faith_labels']['partially_faithful']}, unfaithful {o['faith_labels']['unfaithful']}.",
-             "  Key facts: answerable questions only; a guard fallback text covers none."]
+             "  Key facts: answerable questions only; a guard fallback text covers none.",
+             "  " + cost_line(rep)]
     if rep["no_verdict"]:
         lines.append(f"  No {rep['judge_version']} verdict for " + ", ".join(f"{q} ({s})" for q, s in rep["no_verdict"])
                      + f": the judge-based tags can't fire for them (python -m eval.judge {rep['run']['run_id']}).")
