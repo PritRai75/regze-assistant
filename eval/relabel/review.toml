@@ -1,0 +1,172 @@
+# Key-fact review for the blind re-label (written by python -m eval.relabel --compare).
+# For each question, read your first key facts and your new ones (both are in the --compare output
+# above each block, and below as comments) and set facts to
+#   "same"       the new facts state what the first ones do (wording and order aside)
+#   "different"  otherwise: a fact added, dropped, or saying something else
+# and, if useful, a short note. Then run python -m eval.relabel --compare again.
+
+[[item]]
+id = "q011"
+# first:
+#   - unauthorized use is defined as use without actual, implied, or apparent authority from which the cardholder receives no benefit
+#   - whether prior lending creates implied or apparent authority for subsequent use is determined under state law
+# new:
+#   - Whether the roommate had actual, implied or apparent authority is decided under state or other applicable law
+#   - If she furnished the card and gave him authority that he exceeded, she is liable until she tells the issuer his use is no longer authorized
+#   - If the use is unauthorized, her liability is capped at the lesser of $50 or the amount charged before notice
+facts = "different"                  # "same" or "different"
+note = "New adds the furnished-card comment (12(b)(1)(ii)-3) and the $50 cap; first's definition fact is only folded into new fact 1. Both agree authority is a state-law question."
+
+[[item]]
+id = "q012"
+# first:
+#   - send written acknowledgment within 30 days of receiving the billing error notice (2 December 2026)
+#   - complete resolution procedures within two complete billing cycles, but no later than 90 days (31 January 2027)
+# new:
+#   - Written acknowledgment is due within 30 days of receipt: by 2 December 2026
+#   - Resolution is due within two complete billing cycles, no later than 90 days: by 31 January 2027 at the latest
+#   - The notice is timely because it was received within 60 days after the 15 October 2026 statement
+facts = "different"                  # "same" or "different"
+note = "Added only: new fact 3 (notice timely). The two deadline facts and dates match."
+
+[[item]]
+id = "q013"
+# first:
+#   - quality disputes on accepted merchandise are not billing errors under Regulation Z
+#   - the customer may withhold payment by asserting claims and defenses against the card issuer under 12 CFR § 1026.12(c)
+# new:
+#   - She may assert her claims against the card issuer and withhold the amount still owed for the laptop plus related charges
+#   - Conditions: a good-faith attempt to resolve with the merchant, a purchase over $50, and the purchase in her home state or within 100 miles of her address
+#   - A dispute about the quality of accepted goods is not a billing error
+facts = "different"                  # "same" or "different"
+note = "Added only: new fact 2 (good-faith attempt, over $50, same state or 100 miles). The other two facts match."
+
+[[item]]
+id = "q014"
+# first:
+#   - investigate or provisionally credit within 10 business days (12 November 2026)
+#   - complete investigation within 90 calendar days (26 January 2027)
+# new:
+#   - Determine the error or provisionally credit within 20 business days under the new-account rule: by 27 November 2026
+#   - The investigation may take up to 90 days from the notice: until 26 January 2027
+facts = "different"                  # "same" or "different"
+note = "Substantive: first uses 10 business days (12 Nov 2026), new uses the new-account 20 business days (27 Nov 2026). The 90-day date matches."
+
+[[item]]
+id = "q015"
+# first:
+#   - fees required in the first year cannot exceed 25% of the initial credit limit ($125 for a $500 limit)
+#   - the required annual and program fees total $170, exceeding the 25% cap
+#   - optional fees like a card-replacement fee are exempt from the 25% first-year limit
+# new:
+#   - Required fees in the first year are capped at 25% of the opening credit limit: $125 on a $500 limit
+#   - The $95 annual fee and $75 program fee total $170, $45 over the cap
+#   - A fee for reissuing a lost or stolen card is not a required fee and does not count toward the cap
+facts = "different"                  # "same" or "different"
+note = "Facts 1-2 match. Fact 3 is narrower in new: comment 52(a)(2)-4 exempts reissuing a lost or stolen card, not every card-replacement fee."
+
+[[item]]
+id = "q017"
+# first:
+#   - payments in excess of the minimum payment must be allocated first to the balance with the highest APR
+#   - the entire $400 excess payment must be allocated to the 24% purchase balance
+# new:
+#   - The $400 above the minimum goes first to the 24% purchase balance
+#   - Only a remainder after the purchase balance is paid in full goes to the 0% balance-transfer balance
+#   - The $100 minimum payment may be allocated at the issuer's discretion
+facts = "different"                  # "same" or "different"
+note = "First says the entire $400 goes to the purchase balance; new says first to it, remainder to the 0% balance (balances not given). New adds the minimum-payment fact."
+
+[[item]]
+id = "q019"
+# first:
+#   - the stop-payment notice must be given orally or in writing at least 3 business days before the scheduled transfer date
+#   - the financial institution may require written confirmation within 14 days of oral notification
+# new:
+#   - She must notify the bank at least three business days before the scheduled transfer date
+#   - Notice may be given orally or in writing
+#   - Her call on 4 November 2026 is in time for the 12 November 2026 debit
+facts = "different"                  # "same" or "different"
+note = "Both state the three-business-day oral-or-written rule. New drops the 14-day written-confirmation fact and adds that her 4 Nov call is in time."
+
+[[item]]
+id = "q021"
+# first:
+#   - neither proposed term is permitted under Regulation E
+#   - monthly maintenance or inactivity fees cannot be imposed until after at least 1 year (12 months) of inactivity
+#   - card expiration dates cannot be earlier than 5 years from the date of issuance or fund loading
+# new:
+#   - Dormancy, inactivity or service fees are allowed only after 12 months with no activity, at most one a month, and only if disclosed on the card
+#   - The card must have at least five years left before its expiration date when sold
+#   - The funds may not expire earlier than five years after they were last loaded
+facts = "different"                  # "same" or "different"
+note = "Same conclusions. New adds one-fee-a-month and disclosure conditions, splits card vs funds expiration, and drops the explicit 'neither term permitted' fact."
+
+[[item]]
+id = "q022"
+# first:
+#   - the card is classified as a hybrid prepaid-credit card accessing a covered separate credit feature
+#   - the credit feature cannot be a negative asset balance and must be structured as a separate credit account or subaccount
+#   - the bank must wait at least 30 days after prepaid account registration before opening or soliciting the credit feature
+# new:
+#   - The card is a hybrid prepaid-credit card, which is a credit card under Regulation Z
+#   - The credit must be a separate credit account or subaccount, not a negative balance on the prepaid account
+#   - The credit feature may not be opened, solicited or applied for until 30 days after the prepaid account is registered
+facts = "same"                  # "same" or "different"
+note = "Wording only."
+
+[[item]]
+id = "q025"
+# first:
+#   - rewards program rules and point forfeiture for late payments are governed by the issuer's account agreement and terms
+#   - the provided regulations do not contain rewards program or point cancellation rules
+# new:
+#   - Regulations E and Z do not address forfeiture of reward points for a late payment
+#   - The outcome depends on her card agreement and rewards program terms
+facts = "same"                  # "same" or "different"
+note = ""
+
+[[item]]
+id = "q026"
+# first:
+#   - the 2024 credit card penalty fee rule was vacated by a federal court in April 2025 and is not in force
+#   - the vacated 2024 rule does not require the card issuer to refund the late payment fee
+# new:
+#   - The 2024 late-fee rule was vacated by a federal court in April 2025 and never took effect
+#   - That rule does not require refunding her late fee
+facts = "same"                  # "same" or "different"
+note = ""
+
+[[item]]
+id = "q027"
+# first:
+#   - the December 2024 federal overdraft lending rule was overturned by Congress and never took effect
+#   - current in-force federal rules require affirmative opt-in consent before charging overdraft fees on ATM and one-time debit card transactions under 12 CFR § 1005.17(b)(1)
+# new:
+#   - The December 2024 overdraft rule was overturned by Congress and never took effect
+#   - No federal overdraft fee caps from that rule apply
+#   - Regulation E still requires opt-in before charging overdraft fees on ATM and one-time debit card transactions
+facts = "different"                  # "same" or "different"
+note = "Added only: new fact 2 (no fee caps from that rule), which restates fact 1's consequence; first's reference says the same. Otherwise matches."
+
+[[item]]
+id = "q029"
+# first:
+#   - personal installment loans are closed-end credit governed by Subpart C of Regulation Z
+#   - Subpart C and closed-end credit rules are excluded from the provided regulation corpus
+# new:
+#   - An installment loan is closed-end credit under Regulation Z subpart C
+#   - Closed-end credit rules are not covered by the sources available here
+facts = "same"                  # "same" or "different"
+note = ""
+
+[[item]]
+id = "q030"
+# first:
+#   - interest rate caps and protections for active-duty military servicemembers are governed by separate federal laws outside Regulation Z and Regulation E
+#   - the provided regulatory corpus does not set substantive interest rate limits for active-duty servicemembers
+# new:
+#   - The rate limit comes from the Servicemembers Civil Relief Act, not Regulation E or Z
+#   - The SCRA generally caps interest at 6% on pre-service debts during active duty, after written notice with military orders
+facts = "different"                  # "same" or "different"
+note = "First: limits come from separate federal law outside the corpus. New names the SCRA and its 6% cap, detail the corpus cannot support."

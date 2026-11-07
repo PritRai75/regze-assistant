@@ -1,0 +1,903 @@
+{
+  "ids": [
+    "q011",
+    "q012",
+    "q013",
+    "q014",
+    "q015",
+    "q017",
+    "q019",
+    "q021",
+    "q022",
+    "q025",
+    "q026",
+    "q027",
+    "q029",
+    "q030"
+  ],
+  "first_labelled": "2026-11-04",
+  "sheet_made": "2026-11-07",
+  "gap_days": 3,
+  "first_labels_sha256": "9cee2b2bf28c2915bf881c7021d4dd906066ce4ed6267f24313ce774ca8bc229",
+  "labels_sha256": "4dd22df446248c44715a9313460def8141cca498a5af8173dd560112082c1710",
+  "review": {
+    "q011": {
+      "facts": "different",
+      "note": "New adds the furnished-card comment (12(b)(1)(ii)-3) and the $50 cap; first's definition fact is only folded into new fact 1. Both agree authority is a state-law question."
+    },
+    "q012": {
+      "facts": "different",
+      "note": "Added only: new fact 3 (notice timely). The two deadline facts and dates match."
+    },
+    "q013": {
+      "facts": "different",
+      "note": "Added only: new fact 2 (good-faith attempt, over $50, same state or 100 miles). The other two facts match."
+    },
+    "q014": {
+      "facts": "different",
+      "note": "Substantive: first uses 10 business days (12 Nov 2026), new uses the new-account 20 business days (27 Nov 2026). The 90-day date matches."
+    },
+    "q015": {
+      "facts": "different",
+      "note": "Facts 1-2 match. Fact 3 is narrower in new: comment 52(a)(2)-4 exempts reissuing a lost or stolen card, not every card-replacement fee."
+    },
+    "q017": {
+      "facts": "different",
+      "note": "First says the entire $400 goes to the purchase balance; new says first to it, remainder to the 0% balance (balances not given). New adds the minimum-payment fact."
+    },
+    "q019": {
+      "facts": "different",
+      "note": "Both state the three-business-day oral-or-written rule. New drops the 14-day written-confirmation fact and adds that her 4 Nov call is in time."
+    },
+    "q021": {
+      "facts": "different",
+      "note": "Same conclusions. New adds one-fee-a-month and disclosure conditions, splits card vs funds expiration, and drops the explicit 'neither term permitted' fact."
+    },
+    "q022": {
+      "facts": "same",
+      "note": "Wording only."
+    },
+    "q025": {
+      "facts": "same",
+      "note": ""
+    },
+    "q026": {
+      "facts": "same",
+      "note": ""
+    },
+    "q027": {
+      "facts": "different",
+      "note": "Added only: new fact 2 (no fee caps from that rule), which restates fact 1's consequence; first's reference says the same. Otherwise matches."
+    },
+    "q029": {
+      "facts": "same",
+      "note": ""
+    },
+    "q030": {
+      "facts": "different",
+      "note": "First: limits come from separate federal law outside the corpus. New names the SCRA and its 6% cap, detail the corpus cannot support."
+    }
+  },
+  "fields": {
+    "should_abstain": {
+      "agree": 13,
+      "n": 14,
+      "wilson95": [
+        0.685,
+        0.987
+      ],
+      "changed": [
+        "q027"
+      ],
+      "kappa": 0.837
+    },
+    "type": {
+      "agree": 10,
+      "n": 14,
+      "wilson95": [
+        0.454,
+        0.883
+      ],
+      "changed": [
+        "q012",
+        "q021",
+        "q022",
+        "q027"
+      ],
+      "kappa": 0.656
+    },
+    "abstain_category": {
+      "agree": 4,
+      "n": 4,
+      "wilson95": [
+        0.51,
+        1.0
+      ],
+      "changed": []
+    },
+    "regulation": {
+      "agree": 8,
+      "n": 9,
+      "wilson95": [
+        0.565,
+        0.98
+      ],
+      "changed": [
+        "q022"
+      ]
+    },
+    "gold_ids": {
+      "agree": 1,
+      "n": 9,
+      "wilson95": [
+        0.02,
+        0.435
+      ],
+      "changed": [
+        "q011",
+        "q012",
+        "q013",
+        "q014",
+        "q015",
+        "q017",
+        "q021",
+        "q022"
+      ]
+    },
+    "today": {
+      "agree": 14,
+      "n": 14,
+      "wilson95": [
+        0.785,
+        1.0
+      ],
+      "changed": []
+    },
+    "tool expected": {
+      "agree": 14,
+      "n": 14,
+      "wilson95": [
+        0.785,
+        1.0
+      ],
+      "changed": []
+    },
+    "tool arguments": {
+      "agree": 1,
+      "n": 2,
+      "wilson95": [
+        0.095,
+        0.905
+      ],
+      "changed": [
+        "q014"
+      ]
+    },
+    "tool result": {
+      "agree": 1,
+      "n": 2,
+      "wilson95": [
+        0.095,
+        0.905
+      ],
+      "changed": [
+        "q014"
+      ]
+    },
+    "uncertain": {
+      "agree": 12,
+      "n": 14,
+      "wilson95": [
+        0.601,
+        0.96
+      ],
+      "changed": [
+        "q011",
+        "q027"
+      ]
+    }
+  },
+  "key_facts": {
+    "agree": 4,
+    "n": 14,
+    "wilson95": [
+      0.117,
+      0.546
+    ],
+    "changed": [
+      "q011",
+      "q012",
+      "q013",
+      "q014",
+      "q015",
+      "q017",
+      "q019",
+      "q021",
+      "q027",
+      "q030"
+    ]
+  },
+  "gold_relations": {
+    "overlap": 8,
+    "same IDs": 1
+  },
+  "changed": [
+    "q011",
+    "q012",
+    "q013",
+    "q014",
+    "q015",
+    "q017",
+    "q019",
+    "q021",
+    "q022",
+    "q027",
+    "q030"
+  ],
+  "unchanged": [
+    "q025",
+    "q026",
+    "q029"
+  ],
+  "items": {
+    "q011": {
+      "should_abstain": {
+        "agree": true,
+        "old": false,
+        "new": false
+      },
+      "type": {
+        "agree": true,
+        "old": "unauthorized",
+        "new": "unauthorized"
+      },
+      "uncertain": {
+        "agree": false,
+        "old": false,
+        "new": true
+      },
+      "today": {
+        "agree": true,
+        "old": null,
+        "new": null
+      },
+      "regulation": {
+        "agree": true,
+        "old": "Z",
+        "new": "Z"
+      },
+      "gold_ids": {
+        "agree": false,
+        "relation": "overlap",
+        "old": [
+          "1026.12(b)(1)(i)",
+          "1026.12(b)(1)(ii)-3"
+        ],
+        "new": [
+          "1026.12(b)(1)(ii)"
+        ]
+      },
+      "tool expected": {
+        "agree": true,
+        "old": false,
+        "new": false
+      }
+    },
+    "q012": {
+      "should_abstain": {
+        "agree": true,
+        "old": false,
+        "new": false
+      },
+      "type": {
+        "agree": false,
+        "old": "dispute",
+        "new": "deadline"
+      },
+      "uncertain": {
+        "agree": true,
+        "old": false,
+        "new": false
+      },
+      "today": {
+        "agree": true,
+        "old": null,
+        "new": null
+      },
+      "regulation": {
+        "agree": true,
+        "old": "Z",
+        "new": "Z"
+      },
+      "gold_ids": {
+        "agree": false,
+        "relation": "overlap",
+        "old": [
+          "1026.13(c)(1)",
+          "1026.13(c)(2)"
+        ],
+        "new": [
+          "1026.13(b)(1)",
+          "1026.13(c)(1)",
+          "1026.13(c)(2)"
+        ]
+      },
+      "tool expected": {
+        "agree": true,
+        "old": true,
+        "new": true
+      },
+      "tool arguments": {
+        "agree": true,
+        "old": {
+          "regulation": "Z",
+          "event": "error",
+          "notice_date": "2026-11-02",
+          "statement_sent": "2026-10-15"
+        },
+        "new": {
+          "regulation": "Z",
+          "event": "error",
+          "notice_date": "2026-11-02",
+          "statement_sent": "2026-10-15"
+        }
+      },
+      "tool result": {
+        "agree": true,
+        "old": {
+          "liability_tiers": [],
+          "deadlines": [
+            {
+              "what": "30-day written acknowledgment",
+              "date": "2026-12-02",
+              "rule": "1026.13(c)(1)"
+            },
+            {
+              "what": "2-billing-cycle / 90-day complete resolution",
+              "date": "2027-01-31",
+              "rule": "1026.13(c)(2)"
+            }
+          ],
+          "notice_timely": true
+        },
+        "new": {
+          "liability_tiers": [],
+          "deadlines": [
+            {
+              "what": "Send written acknowledgment of the billing error notice",
+              "date": "2026-12-02",
+              "rule": "1026.13(c)(1)"
+            },
+            {
+              "what": "Resolve the billing error (two complete billing cycles, 90-day cap)",
+              "date": "2027-01-31",
+              "rule": "1026.13(c)(2)"
+            }
+          ],
+          "notice_timely": true
+        }
+      }
+    },
+    "q013": {
+      "should_abstain": {
+        "agree": true,
+        "old": false,
+        "new": false
+      },
+      "type": {
+        "agree": true,
+        "old": "dispute",
+        "new": "dispute"
+      },
+      "uncertain": {
+        "agree": true,
+        "old": false,
+        "new": false
+      },
+      "today": {
+        "agree": true,
+        "old": null,
+        "new": null
+      },
+      "regulation": {
+        "agree": true,
+        "old": "Z",
+        "new": "Z"
+      },
+      "gold_ids": {
+        "agree": false,
+        "relation": "overlap",
+        "old": [
+          "1026.12(c)(1)",
+          "1026.12(c)(3)(i)",
+          "1026.12(c)",
+          "1026.13(a)(3)"
+        ],
+        "new": [
+          "1026.12(c)(1)",
+          "1026.12(c)(3)(i)",
+          "1026.13(a)(3)-1"
+        ]
+      },
+      "tool expected": {
+        "agree": true,
+        "old": false,
+        "new": false
+      }
+    },
+    "q014": {
+      "should_abstain": {
+        "agree": true,
+        "old": false,
+        "new": false
+      },
+      "type": {
+        "agree": true,
+        "old": "deadline",
+        "new": "deadline"
+      },
+      "uncertain": {
+        "agree": true,
+        "old": false,
+        "new": false
+      },
+      "today": {
+        "agree": true,
+        "old": null,
+        "new": null
+      },
+      "regulation": {
+        "agree": true,
+        "old": "E",
+        "new": "E"
+      },
+      "gold_ids": {
+        "agree": false,
+        "relation": "overlap",
+        "old": [
+          "1005.11(c)(1)",
+          "1005.11(c)(3)(ii)"
+        ],
+        "new": [
+          "1005.11(c)(2)(i)",
+          "1005.11(c)(3)(i)",
+          "1005.11(c)(3)(ii)"
+        ]
+      },
+      "tool expected": {
+        "agree": true,
+        "old": true,
+        "new": true
+      },
+      "tool arguments": {
+        "agree": false,
+        "old": {
+          "regulation": "E",
+          "event": "error",
+          "notice_date": "2026-10-28",
+          "transfer_kind": "foreign"
+        },
+        "new": {
+          "regulation": "E",
+          "event": "error",
+          "notice_date": "2026-10-28",
+          "transfer_kind": "foreign",
+          "first_deposit": "2026-10-01",
+          "transfer_date": "2026-10-20"
+        }
+      },
+      "tool result": {
+        "agree": false,
+        "old": {
+          "liability_tiers": [],
+          "deadlines": [
+            {
+              "what": "10-business-day provisional credit or investigation determination",
+              "date": "2026-11-12",
+              "rule": "1005.11(c)(1)"
+            },
+            {
+              "what": "90-calendar-day complete investigation",
+              "date": "2027-01-26",
+              "rule": "1005.11(c)(3)(ii)"
+            }
+          ],
+          "notice_timely": null
+        },
+        "new": {
+          "liability_tiers": [],
+          "deadlines": [
+            {
+              "what": "Provisionally credit the account (new-account period of 20 business days)",
+              "date": "2026-11-27",
+              "rule": "1005.11(c)(2)(i)"
+            },
+            {
+              "what": "Complete the investigation (extended 90-day period)",
+              "date": "2027-01-26",
+              "rule": "1005.11(c)(3)(ii)"
+            }
+          ],
+          "notice_timely": null
+        }
+      }
+    },
+    "q015": {
+      "should_abstain": {
+        "agree": true,
+        "old": false,
+        "new": false
+      },
+      "type": {
+        "agree": true,
+        "old": "fees_terms",
+        "new": "fees_terms"
+      },
+      "uncertain": {
+        "agree": true,
+        "old": false,
+        "new": false
+      },
+      "today": {
+        "agree": true,
+        "old": null,
+        "new": null
+      },
+      "regulation": {
+        "agree": true,
+        "old": "Z",
+        "new": "Z"
+      },
+      "gold_ids": {
+        "agree": false,
+        "relation": "overlap",
+        "old": [
+          "1026.52(a)(1)",
+          "1026.52(a)(2)(ii)"
+        ],
+        "new": [
+          "1026.52(a)(1)",
+          "1026.52(a)(2)-4"
+        ]
+      },
+      "tool expected": {
+        "agree": true,
+        "old": false,
+        "new": false
+      }
+    },
+    "q017": {
+      "should_abstain": {
+        "agree": true,
+        "old": false,
+        "new": false
+      },
+      "type": {
+        "agree": true,
+        "old": "payments_disclosures",
+        "new": "payments_disclosures"
+      },
+      "uncertain": {
+        "agree": true,
+        "old": false,
+        "new": false
+      },
+      "today": {
+        "agree": true,
+        "old": null,
+        "new": null
+      },
+      "regulation": {
+        "agree": true,
+        "old": "Z",
+        "new": "Z"
+      },
+      "gold_ids": {
+        "agree": false,
+        "relation": "overlap",
+        "old": [
+          "1026.53(a)"
+        ],
+        "new": [
+          "1026.53(a)",
+          "1026.53-1"
+        ]
+      },
+      "tool expected": {
+        "agree": true,
+        "old": false,
+        "new": false
+      }
+    },
+    "q019": {
+      "should_abstain": {
+        "agree": true,
+        "old": false,
+        "new": false
+      },
+      "type": {
+        "agree": true,
+        "old": "reg_e_account",
+        "new": "reg_e_account"
+      },
+      "uncertain": {
+        "agree": true,
+        "old": false,
+        "new": false
+      },
+      "today": {
+        "agree": true,
+        "old": "2026-11-04",
+        "new": "2026-11-04"
+      },
+      "regulation": {
+        "agree": true,
+        "old": "E",
+        "new": "E"
+      },
+      "gold_ids": {
+        "agree": true,
+        "relation": "same IDs",
+        "old": [
+          "1005.10(c)(1)",
+          "1005.10(c)(2)"
+        ],
+        "new": [
+          "1005.10(c)(1)",
+          "1005.10(c)(2)"
+        ]
+      },
+      "tool expected": {
+        "agree": true,
+        "old": false,
+        "new": false
+      }
+    },
+    "q021": {
+      "should_abstain": {
+        "agree": true,
+        "old": false,
+        "new": false
+      },
+      "type": {
+        "agree": false,
+        "old": "reg_e_account",
+        "new": "fees_terms"
+      },
+      "uncertain": {
+        "agree": true,
+        "old": false,
+        "new": false
+      },
+      "today": {
+        "agree": true,
+        "old": null,
+        "new": null
+      },
+      "regulation": {
+        "agree": true,
+        "old": "E",
+        "new": "E"
+      },
+      "gold_ids": {
+        "agree": false,
+        "relation": "overlap",
+        "old": [
+          "1005.20(d)(1)",
+          "1005.20(e)(2)(i)"
+        ],
+        "new": [
+          "1005.20(d)",
+          "1005.20(e)(1)",
+          "1005.20(e)(2)"
+        ]
+      },
+      "tool expected": {
+        "agree": true,
+        "old": false,
+        "new": false
+      }
+    },
+    "q022": {
+      "should_abstain": {
+        "agree": true,
+        "old": false,
+        "new": false
+      },
+      "type": {
+        "agree": false,
+        "old": "fees_terms",
+        "new": "cross_reg"
+      },
+      "uncertain": {
+        "agree": true,
+        "old": false,
+        "new": false
+      },
+      "today": {
+        "agree": true,
+        "old": null,
+        "new": null
+      },
+      "regulation": {
+        "agree": false,
+        "old": "Z",
+        "new": "both"
+      },
+      "gold_ids": {
+        "agree": false,
+        "relation": "overlap",
+        "old": [
+          "1026.61(a)(2)(i)",
+          "1026.61(b)",
+          "1026.61(c)(1)"
+        ],
+        "new": [
+          "1026.61(a)(1)",
+          "1026.61(b)",
+          "1026.61(c)"
+        ]
+      },
+      "tool expected": {
+        "agree": true,
+        "old": false,
+        "new": false
+      }
+    },
+    "q025": {
+      "should_abstain": {
+        "agree": true,
+        "old": true,
+        "new": true
+      },
+      "type": {
+        "agree": true,
+        "old": "decline",
+        "new": "decline"
+      },
+      "uncertain": {
+        "agree": true,
+        "old": false,
+        "new": false
+      },
+      "today": {
+        "agree": true,
+        "old": null,
+        "new": null
+      },
+      "abstain_category": {
+        "agree": true,
+        "old": "issuer_terms",
+        "new": "issuer_terms"
+      },
+      "tool expected": {
+        "agree": true,
+        "old": false,
+        "new": false
+      }
+    },
+    "q026": {
+      "should_abstain": {
+        "agree": true,
+        "old": true,
+        "new": true
+      },
+      "type": {
+        "agree": true,
+        "old": "decline",
+        "new": "decline"
+      },
+      "uncertain": {
+        "agree": true,
+        "old": false,
+        "new": false
+      },
+      "today": {
+        "agree": true,
+        "old": null,
+        "new": null
+      },
+      "abstain_category": {
+        "agree": true,
+        "old": "not_in_force",
+        "new": "not_in_force"
+      },
+      "tool expected": {
+        "agree": true,
+        "old": false,
+        "new": false
+      }
+    },
+    "q027": {
+      "should_abstain": {
+        "agree": false,
+        "old": false,
+        "new": true
+      },
+      "type": {
+        "agree": false,
+        "old": "reg_e_account",
+        "new": "decline"
+      },
+      "uncertain": {
+        "agree": false,
+        "old": false,
+        "new": true
+      },
+      "today": {
+        "agree": true,
+        "old": null,
+        "new": null
+      },
+      "tool expected": {
+        "agree": true,
+        "old": false,
+        "new": false
+      }
+    },
+    "q029": {
+      "should_abstain": {
+        "agree": true,
+        "old": true,
+        "new": true
+      },
+      "type": {
+        "agree": true,
+        "old": "decline",
+        "new": "decline"
+      },
+      "uncertain": {
+        "agree": true,
+        "old": false,
+        "new": false
+      },
+      "today": {
+        "agree": true,
+        "old": null,
+        "new": null
+      },
+      "abstain_category": {
+        "agree": true,
+        "old": "excluded_part",
+        "new": "excluded_part"
+      },
+      "tool expected": {
+        "agree": true,
+        "old": false,
+        "new": false
+      }
+    },
+    "q030": {
+      "should_abstain": {
+        "agree": true,
+        "old": true,
+        "new": true
+      },
+      "type": {
+        "agree": true,
+        "old": "decline",
+        "new": "decline"
+      },
+      "uncertain": {
+        "agree": true,
+        "old": false,
+        "new": false
+      },
+      "today": {
+        "agree": true,
+        "old": null,
+        "new": null
+      },
+      "abstain_category": {
+        "agree": true,
+        "old": "other_law",
+        "new": "other_law"
+      },
+      "tool expected": {
+        "agree": true,
+        "old": false,
+        "new": false
+      }
+    }
+  }
+}
