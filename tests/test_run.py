@@ -194,6 +194,27 @@ def test_tool_outcomes():
     assert retried["tool_outcome"] == "correct_call" and retried["tool_calls"] == 2   # any matching call counts
 
 
+def test_g6_another_transfer_kind_with_the_same_timeline_matches():
+    e = {"regulation": "E", "event": "error", "notice_date": "2026-10-28", "transfer_kind": "foreign"}
+    new_acct = {**e, "first_deposit": "2026-10-01", "transfer_date": "2026-10-20"}
+    def outcome(label, got):
+        item = items_from(with_tool())[0].model_copy(
+            update={"expected_tool_call": G.ToolCall(name="dispute_timeline", args=label)})
+        m = R.grade_tool(item, [{"name": "dispute_timeline", "args": got}])
+        return m["tool_outcome"], m["arg_diffs"]
+    assert outcome(e, {**e, "transfer_kind": "pos_debit"}) == ("correct_call", [])        # both 90 days
+    assert outcome(e, {**e, "transfer_kind": "standard"}) == ("wrong_args", ["transfer_kind"])   # 45 days instead
+    assert outcome(new_acct, {**new_acct, "transfer_kind": "standard"}) == ("correct_call", [])  # new account: same
+    assert outcome(new_acct, {**new_acct, "transfer_kind": "pos_debit"}) == ("correct_call", [])
+    # another argument differing too: no excuse, both named
+    assert outcome(e, {**e, "transfer_kind": "pos_debit", "notice_date": "2026-10-29"}) == \
+        ("wrong_args", ["notice_date", "transfer_kind"])
+    assert outcome(e, {**e, "transfer_kind": None}) == ("wrong_args", ["transfer_kind"])   # missing: the tool refuses
+    assert outcome(e, {**e, "transfer_kind": "atm"}) == ("wrong_args", ["transfer_kind"])  # not a kind
+    assert R.same_timeline(new_acct, {**new_acct, "transfer_kind": "standard"})
+    assert not R.same_timeline(e, {**e, "transfer_kind": "standard"})
+
+
 def test_g5_closing_dates_match_when_the_call_starts_with_the_label():
     z = {"regulation": "Z", "event": "error", "notice_date": "2027-03-02",
          "cycle_closing_dates": ["2027-03-10", "2027-04-10", "2027-05-10"]}

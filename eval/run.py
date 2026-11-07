@@ -43,7 +43,10 @@ How each metric is graded (choices marked * are Claude's, session 14, open to Pr
 - Tool calls: no call expected -> correct if none was made. A call expected -> correct if any call has
   the expected name and arguments*, compared after dropping empty arguments, writing dates as
   YYYY-MM-DD and sorting date lists; cycle_closing_dates also match when the call's list starts with
-  the label's (g5, Prit's choice, session 18). Outcomes: correct_call, correct_no_call, missed_call,
+  the label's (g5, Prit's choice, session 18); a call differing only in transfer_kind matches when the
+  tool returns the same deadlines, liability tiers and notice_timely for both values (g6, Prit's choice,
+  session 24: pos_debit and foreign both give 90 days, and a new account gives 20 business days and
+  90 days whatever the kind). Outcomes: correct_call, correct_no_call, missed_call,
   unneeded_call, wrong_args (with the differing argument names).
 - Calculation exactness, items with expected_result: every expected deadline date must appear in the
   final answer text*, in any common form (2026-11-20, November 20, 2026, 20 November, 11/20/2026; a
@@ -85,10 +88,11 @@ from eval import golden as G
 
 REPO = Path(__file__).resolve().parents[1]
 DB_FILE = REPO / "runs.db"
-GRADER_VERSION = "g5"                 # bump when a grading rule changes, so old and new numbers aren't mixed
+GRADER_VERSION = "g6"                 # bump when a grading rule changes, so old and new numbers aren't mixed
 # g1 first harness; g2 tier amounts in the text for Reg E only (S14); g3 citations read with app.citations (S15);
 # g4 bracketed comment sub-points, "-2(ii)", read as the comment (S15); g5 cycle_closing_dates match when the
-# call's list starts with the label's (S18)
+# call's list starts with the label's (S18); g6 a call differing only in transfer_kind matches when the tool
+# gives the same timeline for both (S24)
 EVAL_TODAY = date(2026, 11, 3)        # "today" for questions that don't state their own
 GUARD_CAUSES = ("no_valid_citation", "output_invalid", "tool_limit")
 
@@ -177,6 +181,17 @@ def arg_matches(name: str, want, got) -> bool:
     return want == got
 
 
+def same_timeline(want: dict, got: dict) -> bool:
+    """True if dispute_timeline gives the same deadlines, liability tiers and notice_timely for both
+    argument sets (and neither is an error). Used only when they differ in transfer_kind alone (g6)."""
+    from app.tools import dispute_timeline
+    a, b = dispute_timeline(**want), dispute_timeline(**got)
+    if "error" in a or "error" in b:
+        return False
+    key = lambda r: (r["deadlines"], r["liability_tiers"], r["notice_timely"])  # noqa: E731
+    return key(a) == key(b)
+
+
 def grade_tool(item: G.GoldenItem, calls: list[dict]) -> dict:
     exp = item.expected_tool_call
     m = {"tool_calls": len(calls), "tool_errors": sum("error" in (c.get("result") or {}) for c in calls),
@@ -191,6 +206,8 @@ def grade_tool(item: G.GoldenItem, calls: list[dict]) -> dict:
         for c in calls:
             got = norm_args(c.get("args"))
             names = sorted(k for k in set(want) | set(got) if not arg_matches(k, want.get(k), got.get(k)))
+            if names == ["transfer_kind"] and c.get("name") == exp.name and same_timeline(want, got):
+                names = []                                           # g6: another kind, the same timeline
             diffs.append(names + (["name"] if c.get("name") != exp.name else []))
         best = min(diffs, key=len)
         m["tool_outcome"] = "correct_call" if not best else "wrong_args"

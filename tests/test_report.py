@@ -309,7 +309,7 @@ def test_text_and_markdown(db):
     t, md = P.text(rep), P.markdown(rep)
     for out in (t, md):
         assert "upper bound" in out and "lower bound" in out and "q024 (missing)" in out
-        assert "Graded again with g5 (the run was logged with g4)." in out
+        assert f"Graded again with {R.GRADER_VERSION} (the run was logged with g4)." in out
         assert "too few to compare" in out
     assert "| all | 6 |" in md and "| q008 | frontline | decline | memory_leak |" in md
     assert "4 of 6 questions failed" in t
