@@ -1,0 +1,319 @@
+# Blind re-label (spec: labeling rule 5). Written and labelled by Prit Raithatha.
+#
+# Label each question below again, from the question and the regulation text only, as you did in
+# pass 2 (python -m eval.lookup is fine). Don't open eval/golden.toml, and don't run
+# python -m eval.golden, eval.report --show or eval.judge --show, until this file is committed.
+# Don't change id, persona or question.
+#
+# Fields (the same as in pass 2):
+#   type              one of unauthorized, dispute, deadline, fees_terms, payments_disclosures, reg_e_account, cross_reg, decline
+#   regulation        "E", "Z" or "both" (leave out for most declines)
+#   today             the date the question treats as today, if it says one (unquoted: 2026-11-03)
+#   gold_ids          provision IDs exactly as in the index; the narrowest paragraph that fully answers
+#   reference_answer  two to four sentences a correct answer would say
+#   key_facts         1 to 3 short facts (0 to 3 for a decline)
+#   should_abstain    true for a decline; then type = "decline" and abstain_category is one of
+#                     network_rules, state_law, issuer_terms, other_law, excluded_part, not_in_force, sign_off
+#   uncertain         true only when unsure
+#   expected_tool_call / expected_result   only when the answer needs dispute_timeline; compute the
+#                     result by hand first, as before. Put the two tables after the plain fields of
+#                     their block. Shape (placeholder values, not a real label):
+#
+# [question.expected_tool_call]
+# name = "dispute_timeline"
+# args = { regulation = "E", event = "error", notice_date = "2026-11-05", transfer_kind = "standard" }
+#
+# [question.expected_result]
+# notice_timely = true
+# deadlines = [
+#   { what = "first deadline in your words", date = 2026-11-19, rule = "1005.x(y)(1)" },
+# ]
+#
+# Check any time with:  python -m eval.relabel --check
+
+[[question]]
+id = "q011"
+stage = "labelled"
+persona = "frontline"
+question = """
+A customer says her roommate took her credit card from her purse and used it without asking. She had previously lent him the card once to buy groceries but did not authorize these later purchases. Does having lent him the card before affect how we treat the new transactions?"""
+type = "unauthorized"
+regulation = "Z"
+# today = 2026-11-03        # only if the question names its own "today"
+gold_ids = ["1026.12(b)(1)(ii)"]
+reference_answer = """
+Not automatically. Under Regulation Z a use is unauthorized if the user had no actual, implied or apparent authority, and whether he had that authority is decided under state or other applicable law. The earlier loan matters because the commentary makes a cardholder liable when she furnished the card and gave authority to someone who then exceeded it, unless she had told the issuer his use was no longer authorized; here he took the card without being given it, so the facts need investigating before deciding. If the use is unauthorized, her liability is capped at the lesser of $50 or the amount charged before she notified us.
+"""
+key_facts = ["Whether the roommate had actual, implied or apparent authority is decided under state or other applicable law", "If she furnished the card and gave him authority that he exceeded, she is liable until she tells the issuer his use is no longer authorized", "If the use is unauthorized, her liability is capped at the lesser of $50 or the amount charged before notice"]
+should_abstain = false
+# abstain_category = ""
+uncertain = true
+# Tool call and result, only if the answer needs dispute_timeline.
+
+[[question]]
+id = "q012"
+stage = "labelled"
+persona = "frontline"
+question = """
+A customer says a hotel charged her credit card $480 even though the agreed room rate was $280. The $480 charge appears on her statement sent on 15 October 2026, and her written complaint reached our bank by mail on 2 November 2026. What deadlines apply to handling this billing complaint?"""
+type = "deadline"
+regulation = "Z"
+# today = 2026-11-03        # only if the question names its own "today"
+gold_ids = ["1026.13(b)(1)", "1026.13(c)(1)", "1026.13(c)(2)"]
+reference_answer = """
+Her letter is a billing error notice received within 60 days after the 15 October 2026 statement was sent, so it is timely. The bank must send her a written acknowledgment within 30 days of receiving it, by 2 December 2026, unless it resolves the dispute sooner. It must resolve the dispute within two complete billing cycles and in no event later than 90 days after receipt, so by 31 January 2027 at the latest.
+"""
+key_facts = ["Written acknowledgment is due within 30 days of receipt: by 2 December 2026", "Resolution is due within two complete billing cycles, no later than 90 days: by 31 January 2027 at the latest", "The notice is timely because it was received within 60 days after the 15 October 2026 statement"]
+should_abstain = false
+# abstain_category = ""
+# uncertain = true          # only when unsure
+# Tool call and result, only if the answer needs dispute_timeline.
+
+[question.expected_tool_call]
+name = "dispute_timeline"
+args = { regulation = "Z", event = "error", notice_date = "2026-11-02", statement_sent = "2026-10-15" }
+
+[question.expected_result]
+notice_timely = true
+deadlines = [
+  { what = "Send written acknowledgment of the billing error notice", date = 2026-12-02, rule = "1026.13(c)(1)" },
+  { what = "Resolve the billing error (two complete billing cycles, 90-day cap)", date = 2027-01-31, rule = "1026.13(c)(2)" },
+]
+
+[[question]]
+id = "q013"
+stage = "labelled"
+persona = "compliance"
+question = """
+A customer used our bank-issued credit card to purchase a laptop for $900. The laptop stopped working seven days after purchase, and the store has refused to repair it, replace it or issue a refund. Can the customer withhold payment through a credit-card billing dispute?"""
+type = "dispute"
+regulation = "Z"
+# today = 2026-11-03        # only if the question names its own "today"
+gold_ids = ["1026.12(c)(1)", "1026.12(c)(3)(i)", "1026.13(a)(3)-1"]
+reference_answer = """
+Yes, but under the claims-and-defenses rule rather than as a billing error, because a dispute about the quality of goods the customer accepted is not a billing error. Since the store refused to resolve the dispute, she may assert her claims against us and withhold payment of the amount still outstanding for the laptop plus related finance or other charges. The right applies only if she made a good-faith attempt to resolve the dispute with the store, which she did, and the purchase exceeded $50 and took place in the same state as her billing address or within 100 miles of it.
+"""
+key_facts = ["She may assert her claims against the card issuer and withhold the amount still owed for the laptop plus related charges", "Conditions: a good-faith attempt to resolve with the merchant, a purchase over $50, and the purchase in her home state or within 100 miles of her address", "A dispute about the quality of accepted goods is not a billing error"]
+should_abstain = false
+# abstain_category = ""
+# uncertain = true          # only when unsure
+# Tool call and result, only if the answer needs dispute_timeline.
+
+[[question]]
+id = "q014"
+stage = "labelled"
+persona = "compliance"
+question = """
+A customer opened a checking account with us on 1 October 2026 and used her debit card to make a $120 purchase at a shop in Mexico on 20 October 2026. The transaction appeared twice on her account, and she first notified our bank by telephone on 28 October 2026. What investigation and resolution deadlines apply?"""
+type = "deadline"
+regulation = "E"
+# today = 2026-11-03        # only if the question names its own "today"
+gold_ids = ["1005.11(c)(2)(i)", "1005.11(c)(3)(i)", "1005.11(c)(3)(ii)"]
+reference_answer = """
+The duplicate posting is an error under Regulation E, and because the purchase was made within 30 days after the first deposit to a new account, the new-account time limits apply. The bank must determine whether an error occurred, or provisionally credit the $120, within 20 business days of the 28 October 2026 notice, which is by 27 November 2026. If it provisionally credits, it may take up to 90 days to complete the investigation, until 26 January 2027; the 90-day period would also apply because this was a point-of-sale debit card purchase initiated outside the United States.
+"""
+key_facts = ["Determine the error or provisionally credit within 20 business days under the new-account rule: by 27 November 2026", "The investigation may take up to 90 days from the notice: until 26 January 2027"]
+should_abstain = false
+# abstain_category = ""
+# uncertain = true          # only when unsure
+# Tool call and result, only if the answer needs dispute_timeline.
+
+[question.expected_tool_call]
+name = "dispute_timeline"
+args = { regulation = "E", event = "error", notice_date = "2026-10-28", transfer_kind = "foreign", first_deposit = "2026-10-01", transfer_date = "2026-10-20" }
+
+[question.expected_result]
+deadlines = [
+  { what = "Provisionally credit the account (new-account period of 20 business days)", date = 2026-11-27, rule = "1005.11(c)(2)(i)" },
+  { what = "Complete the investigation (extended 90-day period)", date = 2027-01-26, rule = "1005.11(c)(3)(ii)" },
+]
+
+[[question]]
+id = "q015"
+stage = "labelled"
+persona = "frontline"
+question = """
+A new customer received a credit card with a $500 credit limit and was charged a $95 annual fee, a $75 program fee and a $25 card-replacement fee during the first month. She wants to know whether the bank is allowed to charge these fees."""
+type = "fees_terms"
+regulation = "Z"
+# today = 2026-11-03        # only if the question names its own "today"
+gold_ids = ["1026.52(a)(1)", "1026.52(a)(2)-4"]
+reference_answer = """
+Not all of them. During the first year after account opening, the fees a consumer is required to pay on a credit card account may not exceed 25% of the credit limit at opening, which is $125 on a $500 limit. The $95 annual fee and the $75 program fee total $170, so the $45 over the cap must be waived or credited, no later than the end of the billing cycle after the one in which it was charged. A fee for reissuing a lost or stolen card is not a required fee and does not count toward the cap.
+"""
+key_facts = ["Required fees in the first year are capped at 25% of the opening credit limit: $125 on a $500 limit", "The $95 annual fee and $75 program fee total $170, $45 over the cap", "A fee for reissuing a lost or stolen card is not a required fee and does not count toward the cap"]
+should_abstain = false
+# abstain_category = ""
+# uncertain = true          # only when unsure
+# Tool call and result, only if the answer needs dispute_timeline.
+
+[[question]]
+id = "q017"
+stage = "labelled"
+persona = "compliance"
+question = """
+Our credit-card system receives a $500 payment from a customer whose minimum payment due is $100. The account has a 0% balance-transfer balance and a purchase balance carrying a 24% APR. How must the system allocate the amount paid above the minimum between these two balances?"""
+type = "payments_disclosures"
+regulation = "Z"
+# today = 2026-11-03        # only if the question names its own "today"
+gold_ids = ["1026.53(a)", "1026.53-1"]
+reference_answer = """
+The $400 paid above the $100 minimum must be applied first to the balance with the highest APR, the 24% purchase balance. Only an amount left over after that balance is paid in full may go to the 0% balance-transfer balance. The rule covers only the excess: the issuer may allocate the $100 minimum payment as it chooses, consistent with other applicable law.
+"""
+key_facts = ["The $400 above the minimum goes first to the 24% purchase balance", "Only a remainder after the purchase balance is paid in full goes to the 0% balance-transfer balance", "The $100 minimum payment may be allocated at the issuer's discretion"]
+should_abstain = false
+# abstain_category = ""
+# uncertain = true          # only when unsure
+# Tool call and result, only if the answer needs dispute_timeline.
+
+[[question]]
+id = "q019"
+stage = "labelled"
+persona = "frontline"
+question = """
+A checking-account customer wants us to stop her insurance company's automatic monthly ACH debit from her account. The next payment is scheduled for 12 November 2026, and she is calling us today, 4 November 2026. What notice period applies to her stop-payment request?"""
+type = "reg_e_account"
+regulation = "E"
+today = 2026-11-04
+gold_ids = ["1005.10(c)(1)", "1005.10(c)(2)"]
+reference_answer = """
+Under Regulation E she may stop a preauthorized electronic transfer from her account by notifying the bank orally or in writing at least three business days before the scheduled transfer date. Her call on 4 November 2026 for a debit scheduled on 12 November 2026 meets that notice period, so the bank must honor the stop-payment order. If the bank requires written confirmation, it must tell her so during the call and give her the address, and the oral order stops being binding after 14 days if she does not confirm in writing.
+"""
+key_facts = ["She must notify the bank at least three business days before the scheduled transfer date", "Notice may be given orally or in writing", "Her call on 4 November 2026 is in time for the 12 November 2026 debit"]
+should_abstain = false
+# abstain_category = ""
+# uncertain = true          # only when unsure
+# Tool call and result, only if the answer needs dispute_timeline.
+
+[[question]]
+id = "q021"
+stage = "labelled"
+persona = "compliance"
+question = """
+Our bank is developing a store-branded gift card that can only be used at the issuing store and its affiliated locations. The proposed terms include a monthly maintenance fee beginning six months after purchase and an expiration date three years after purchase. Are these proposed terms permitted?"""
+type = "fees_terms"
+regulation = "E"
+# today = 2026-11-03        # only if the question names its own "today"
+gold_ids = ["1005.20(d)", "1005.20(e)(1)", "1005.20(e)(2)"]
+reference_answer = """
+Neither term is permitted as proposed. A monthly maintenance fee is a service fee, and on a store gift card a dormancy, inactivity or service fee may be charged only after 12 months with no activity on the card, no more than once a month, and only if it is disclosed on the card, so a fee starting six months after purchase is not allowed. A card may carry an expiration date only if consumers have a reasonable opportunity to buy one with at least five years left before it expires, and the funds may not expire earlier than five years after they were last loaded, so a three-year expiration is not allowed either.
+"""
+key_facts = ["Dormancy, inactivity or service fees are allowed only after 12 months with no activity, at most one a month, and only if disclosed on the card", "The card must have at least five years left before its expiration date when sold", "The funds may not expire earlier than five years after they were last loaded"]
+should_abstain = false
+# abstain_category = ""
+# uncertain = true          # only when unsure
+# Tool call and result, only if the answer needs dispute_timeline.
+
+[[question]]
+id = "q022"
+stage = "labelled"
+persona = "compliance"
+question = """
+Our bank is developing a prepaid card that would allow customers to spend more than their available prepaid balance through a linked credit feature. The credit feature would cover the negative balance, and customers would repay the amount later. How is this product classified, and what requirements apply to the linked credit feature?"""
+type = "cross_reg"
+regulation = "both"
+# today = 2026-11-03        # only if the question names its own "today"
+gold_ids = ["1026.61(a)(1)", "1026.61(b)", "1026.61(c)"]
+reference_answer = """
+A prepaid card that can be used to access credit from a feature offered by the bank is a hybrid prepaid-credit card, which is a credit card under Regulation Z, and the linked credit feature is a covered separate credit feature subject to Regulation Z's credit card rules; the prepaid account itself remains a Regulation E prepaid account. The credit may not be structured as a negative balance on the prepaid account: it must be a separate credit account or a separate credit subaccount, drawn on when a transaction is authorized or settled so that the prepaid balance never goes negative. The bank also may not open the credit feature, solicit it or provide an application for it until 30 days after the prepaid account has been registered.
+"""
+key_facts = ["The card is a hybrid prepaid-credit card, which is a credit card under Regulation Z", "The credit must be a separate credit account or subaccount, not a negative balance on the prepaid account", "The credit feature may not be opened, solicited or applied for until 30 days after the prepaid account is registered"]
+should_abstain = false
+# abstain_category = ""
+# uncertain = true          # only when unsure
+# Tool call and result, only if the answer needs dispute_timeline.
+
+[[question]]
+id = "q025"
+stage = "labelled"
+persona = "frontline"
+question = """
+A credit-card customer contacts us because she expects to make her payment late in November 2026. She is worried that the bank will immediately cancel or remove all the reward points she has accumulated. What should we tell her about the effect of a late payment on her reward points?"""
+type = "decline"
+# regulation = "E"          # "E", "Z" or "both"; leave out for most declines
+# today = 2026-11-03        # only if the question names its own "today"
+gold_ids = []
+reference_answer = """
+Regulations E and Z do not govern whether reward points are reduced or forfeited after a late payment, so the answer depends on the terms of her card agreement and rewards program. Check those terms, or refer her to the team that handles the rewards program, before telling her what will happen to her points.
+"""
+key_facts = ["Regulations E and Z do not address forfeiture of reward points for a late payment", "The outcome depends on her card agreement and rewards program terms"]
+should_abstain = true
+abstain_category = "issuer_terms"
+# uncertain = true          # only when unsure
+# Tool call and result, only if the answer needs dispute_timeline.
+
+[[question]]
+id = "q026"
+stage = "labelled"
+persona = "frontline"
+question = """
+A credit-card customer was charged a late-payment fee in October 2026. She says she read a news article about a federal rule issued in 2024 that reduced credit-card late fees and wants us to refund the amount charged. Does that rule require us to refund her late fee?"""
+type = "decline"
+# regulation = "E"          # "E", "Z" or "both"; leave out for most declines
+# today = 2026-11-03        # only if the question names its own "today"
+gold_ids = []
+reference_answer = """
+No. The 2024 credit card late-fee rule was vacated by a federal court in April 2025 and never took effect, so it does not require a refund. Her late fee must still comply with the penalty-fee limits in Regulation Z that are in force, which compliance can confirm if she disputes the amount.
+"""
+key_facts = ["The 2024 late-fee rule was vacated by a federal court in April 2025 and never took effect", "That rule does not require refunding her late fee"]
+should_abstain = true
+abstain_category = "not_in_force"
+# uncertain = true          # only when unsure
+# Tool call and result, only if the answer needs dispute_timeline.
+
+[[question]]
+id = "q027"
+stage = "labelled"
+persona = "compliance"
+question = """
+Our bank is redesigning the overdraft-fee structure for its checking accounts. The product manager wants to implement the federal overdraft rule announced in December 2024 and asks which fee limits must be built into the new system. What federal overdraft-fee requirements are currently in force?"""
+type = "decline"
+# regulation = "E"          # "E", "Z" or "both"; leave out for most declines
+# today = 2026-11-03        # only if the question names its own "today"
+gold_ids = ["1005.17(b)(1)"]
+reference_answer = """
+The December 2024 overdraft rule was overturned by Congress under the Congressional Review Act (Pub. L. 119-10) and is treated as never having taken effect, so there are no fee limits from it to build into the system. The federal requirement that is in force is Regulation E's opt-in rule: the bank may not charge a fee for paying an ATM or one-time debit card transaction into overdraft unless the customer received the required notice and affirmatively opted in. Have compliance confirm the full design before it is finalized.
+"""
+key_facts = ["The December 2024 overdraft rule was overturned by Congress and never took effect", "No federal overdraft fee caps from that rule apply", "Regulation E still requires opt-in before charging overdraft fees on ATM and one-time debit card transactions"]
+should_abstain = true
+abstain_category = "not_in_force"
+uncertain = true
+# Tool call and result, only if the answer needs dispute_timeline.
+
+[[question]]
+id = "q029"
+stage = "labelled"
+persona = "frontline"
+question = """
+A customer contacts us about a personal installment loan issued by our bank. Her payment schedule shows an interest rate different from the rate she says our representative quoted when she applied. Which consumer-protection requirements apply to her complaint?"""
+type = "decline"
+# regulation = "E"          # "E", "Z" or "both"; leave out for most declines
+# today = 2026-11-03        # only if the question names its own "today"
+gold_ids = []
+reference_answer = """
+A personal installment loan is closed-end credit, and its Truth in Lending disclosure rules, including the annual percentage rate and the payment schedule, are in Regulation Z subpart C, which the sources available here do not cover. Refer the complaint to compliance or the lending team so they can compare her loan disclosures with what she says she was quoted.
+"""
+key_facts = ["An installment loan is closed-end credit under Regulation Z subpart C", "Closed-end credit rules are not covered by the sources available here"]
+should_abstain = true
+abstain_category = "excluded_part"
+# uncertain = true          # only when unsure
+# Tool call and result, only if the answer needs dispute_timeline.
+
+[[question]]
+id = "q030"
+stage = "labelled"
+persona = "compliance"
+question = """
+Our bank is about to charge its standard credit-card interest rate of 24% to a customer who is currently serving on active duty in the US military. The customer opened the credit-card account and incurred the outstanding balance before beginning active-duty service on 1 September 2026. What restrictions apply to the interest rate we can charge?"""
+type = "decline"
+# regulation = "E"          # "E", "Z" or "both"; leave out for most declines
+# today = 2026-11-03        # only if the question names its own "today"
+gold_ids = []
+reference_answer = """
+This is governed by the Servicemembers Civil Relief Act, not Regulation E or Z. The SCRA generally caps interest at 6% a year on debts a servicemember incurred before entering active duty, for the period of service, once the servicemember gives written notice and a copy of the military orders. Confirm the details with compliance or legal before charging 24%.
+"""
+key_facts = ["The rate limit comes from the Servicemembers Civil Relief Act, not Regulation E or Z", "The SCRA generally caps interest at 6% on pre-service debts during active duty, after written notice with military orders"]
+should_abstain = true
+abstain_category = "other_law"
+# uncertain = true          # only when unsure
+# Tool call and result, only if the answer needs dispute_timeline.
