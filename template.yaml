@@ -1,0 +1,142 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: >-
+  RegZE Assistant: answers staff questions about Regulations Z and E with citations.
+  One Lambda function behind a REST API that needs an API key, with a usage plan
+  (throttle and daily quota) and a role that can call only the two Bedrock models it uses.
+
+# Deploy from the repo root (samconfig.toml holds the stack name, region and other settings):
+#   python -m deploy.stage && sam build && sam deploy
+# The index, the holiday table and the app code ship inside the function package (spec).
+
+Parameters:
+  GeneratorModel:
+    Type: String
+    Default: anthropic.claude-sonnet-4-6
+    Description: >-
+      The answer model's name without the "global." prefix. app/config.py calls
+      "global." + this name (a global inference profile); tests/test_template.py checks they match.
+  EmbeddingModel:
+    Type: String
+    Default: amazon.titan-embed-text-v2:0
+    Description: The question embedding model (index/meta.json); called in this region only.
+  DailyQuota:
+    Type: Number
+    Default: 50
+    Description: Requests per day the API key may make (cost cap; one question costs a few US cents).
+
+Resources:
+  AskFunctionLogs:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      RetentionInDays: 14
+
+  # The function's own role, written out instead of SAM's default, so it holds exactly these permissions:
+  # write to its own log group, embed with Titan here, and call the answer model through its global
+  # inference profile. The three Sonnet statements follow the Bedrock user guide's policy for global
+  # cross-Region inference: the profile in this region, the model in this region, and the model's
+  # region-less ARN ("unspecified" region), the last two only when reached through that profile.
+  AskFunctionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: logs
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Sid: WriteOwnLogs
+                Effect: Allow
+                Action:
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: !GetAtt AskFunctionLogs.Arn
+        - PolicyName: bedrock
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Sid: EmbedQuestions
+                Effect: Allow
+                Action: bedrock:InvokeModel
+                Resource: !Sub arn:${AWS::Partition}:bedrock:${AWS::Region}::foundation-model/${EmbeddingModel}
+              - Sid: GeneratorProfileInRegion
+                Effect: Allow
+                Action: bedrock:InvokeModel
+                Resource: !Sub arn:${AWS::Partition}:bedrock:${AWS::Region}:${AWS::AccountId}:inference-profile/global.${GeneratorModel}
+                Condition:
+                  StringEquals:
+                    aws:RequestedRegion: !Ref AWS::Region
+              - Sid: GeneratorModelInRegion
+                Effect: Allow
+                Action: bedrock:InvokeModel
+                Resource: !Sub arn:${AWS::Partition}:bedrock:${AWS::Region}::foundation-model/${GeneratorModel}
+                Condition:
+                  StringEquals:
+                    aws:RequestedRegion: !Ref AWS::Region
+                    bedrock:InferenceProfileArn: !Sub arn:${AWS::Partition}:bedrock:${AWS::Region}:${AWS::AccountId}:inference-profile/global.${GeneratorModel}
+              - Sid: GeneratorModelGlobal
+                Effect: Allow
+                Action: bedrock:InvokeModel
+                Resource: !Sub arn:${AWS::Partition}:bedrock:::foundation-model/${GeneratorModel}
+                Condition:
+                  StringEquals:
+                    aws:RequestedRegion: unspecified
+                    bedrock:InferenceProfileArn: !Sub arn:${AWS::Partition}:bedrock:${AWS::Region}:${AWS::AccountId}:inference-profile/global.${GeneratorModel}
+
+  CardRulesApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: v1
+      EndpointConfiguration:
+        Type: REGIONAL
+      Auth:
+        ApiKeyRequired: true
+        UsagePlan:
+          CreateUsagePlan: PER_API
+          Description: RegZE Assistant, one key
+          Throttle:
+            RateLimit: 1
+            BurstLimit: 2
+          Quota:
+            Limit: !Ref DailyQuota
+            Period: DAY
+
+  AskFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: Answers one question (app.answer with the default configuration)
+      CodeUri: .aws-sam/stage/
+      Handler: app.handler.lambda_handler
+      Runtime: python3.13
+      Architectures:
+        - x86_64
+      MemorySize: 1024
+      Timeout: 29
+      Role: !GetAtt AskFunctionRole.Arn
+      LoggingConfig:
+        LogGroup: !Ref AskFunctionLogs
+      Events:
+        Ask:
+          Type: Api
+          Properties:
+            RestApiId: !Ref CardRulesApi
+            Path: /ask
+            Method: post
+
+Outputs:
+  AskUrl:
+    Description: POST questions here, with the header x-api-key
+    Value: !Sub https://${CardRulesApi}.execute-api.${AWS::Region}.${AWS::URLSuffix}/v1/ask
+  ApiKeyId:
+    Description: The key's ID, not its value (aws apigateway get-api-key --api-key ID --include-value)
+    Value: !Ref CardRulesApiApiKey
+  FunctionName:
+    Value: !Ref AskFunction
+  LogGroup:
+    Value: !Ref AskFunctionLogs

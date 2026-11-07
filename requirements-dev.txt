@@ -1,3 +1,4 @@
 # Everything in requirements.txt, plus the test runner.
 -r requirements.txt
 pytest==9.2.0
+pyyaml==6.0.3

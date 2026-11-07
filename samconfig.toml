@@ -1,0 +1,17 @@
+# Settings for `sam build` and `sam deploy` (read automatically from the repo root). No secrets here:
+# the account comes from your `aws login` session and the API key is created by the stack.
+version = 0.1
+
+[default.global.parameters]
+stack_name = "regze-assistant"
+region = "ap-south-1"            # must match index/meta.json (tests/test_deploy.py checks)
+
+[default.build.parameters]
+cached = false                   # always rebuild from .aws-sam/stage/
+
+[default.deploy.parameters]
+capabilities = "CAPABILITY_IAM"  # the stack creates the function's role
+confirm_changeset = true         # show what will change and ask y/N before changing anything
+resolve_s3 = true                # SAM creates and reuses one bucket for the uploaded package
+s3_prefix = "regze-assistant"
+fail_on_empty_changeset = false
