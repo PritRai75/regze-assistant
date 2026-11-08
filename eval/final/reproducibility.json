@@ -1,0 +1,282 @@
+{
+  "first": "r20261107T174057Z",
+  "second": "r20261107T175037Z",
+  "judge_version": "j2",
+  "grader": "g6",
+  "config_hash": "b2bef7bd2dd0",
+  "check1": [
+    {
+      "run": "r20261107T174057Z",
+      "regrade_same": true,
+      "changed": [],
+      "logged_with": "g6",
+      "report_same": true,
+      "pass": true
+    },
+    {
+      "run": "r20261107T175037Z",
+      "regrade_same": true,
+      "changed": [],
+      "logged_with": "g6",
+      "report_same": true,
+      "pass": true
+    }
+  ],
+  "check2": {
+    "search": [
+      {
+        "measure": "hit_at_1",
+        "first": [
+          5,
+          24
+        ],
+        "second": [
+          5,
+          24
+        ],
+        "pass": true
+      },
+      {
+        "measure": "hit_at_3",
+        "first": [
+          15,
+          24
+        ],
+        "second": [
+          15,
+          24
+        ],
+        "pass": true
+      },
+      {
+        "measure": "hit_at_5",
+        "first": [
+          16,
+          24
+        ],
+        "second": [
+          16,
+          24
+        ],
+        "pass": true
+      },
+      {
+        "measure": "mrr",
+        "first": 0.397,
+        "second": 0.397,
+        "pass": true
+      },
+      {
+        "measure": "gold_recall",
+        "first": [
+          26,
+          49
+        ],
+        "second": [
+          26,
+          49
+        ],
+        "pass": true
+      }
+    ],
+    "rank_moves": [],
+    "counts": [
+      {
+        "measure": "passed (no error tag)",
+        "first": 9,
+        "second": 9,
+        "total": 36,
+        "move": 0,
+        "limit": 5,
+        "pass": true
+      },
+      {
+        "measure": "judge faithful*",
+        "first": 19,
+        "second": 22,
+        "total": 36,
+        "move": 3,
+        "limit": 5,
+        "pass": true
+      },
+      {
+        "measure": "declines declined",
+        "first": 10,
+        "second": 10,
+        "total": 12,
+        "move": 0,
+        "limit": 3,
+        "pass": true
+      },
+      {
+        "measure": "answerable answered",
+        "first": 23,
+        "second": 23,
+        "total": 24,
+        "move": 0,
+        "limit": 3,
+        "pass": true
+      },
+      {
+        "measure": "tool correct",
+        "first": 30,
+        "second": 31,
+        "total": 36,
+        "move": 1,
+        "limit": 5,
+        "pass": true
+      },
+      {
+        "measure": "calculation exact",
+        "first": 6,
+        "second": 6,
+        "total": 6,
+        "move": 0,
+        "limit": 3,
+        "pass": true
+      },
+      {
+        "measure": "key facts covered",
+        "first": 37,
+        "second": 38,
+        "total": 52,
+        "move": 1,
+        "limit": 7,
+        "pass": true
+      },
+      {
+        "measure": "status errors",
+        "first": 3,
+        "second": 4,
+        "total": 36,
+        "move": 1,
+        "limit": 5,
+        "pass": true
+      },
+      {
+        "measure": "wrong-regulation errors",
+        "first": 1,
+        "second": 1,
+        "total": 36,
+        "move": 0,
+        "limit": 5,
+        "pass": true
+      }
+    ],
+    "mcnemar": [
+      {
+        "measure": "hit@5",
+        "first": 16,
+        "second": 16,
+        "total": 24,
+        "second_only": 0,
+        "first_only": 0,
+        "p": 1.0,
+        "pass": true
+      },
+      {
+        "measure": "abstention correct",
+        "first": 33,
+        "second": 33,
+        "total": 36,
+        "second_only": 0,
+        "first_only": 0,
+        "p": 1.0,
+        "pass": true
+      },
+      {
+        "measure": "declines declined",
+        "first": 10,
+        "second": 10,
+        "total": 12,
+        "second_only": 0,
+        "first_only": 0,
+        "p": 1.0,
+        "pass": true
+      },
+      {
+        "measure": "answerable answered",
+        "first": 23,
+        "second": 23,
+        "total": 24,
+        "second_only": 0,
+        "first_only": 0,
+        "p": 1.0,
+        "pass": true
+      },
+      {
+        "measure": "declines without memory_leak",
+        "first": 8,
+        "second": 8,
+        "total": 12,
+        "second_only": 0,
+        "first_only": 0,
+        "p": 1.0,
+        "pass": true
+      },
+      {
+        "measure": "tool correct",
+        "first": 30,
+        "second": 31,
+        "total": 36,
+        "second_only": 1,
+        "first_only": 0,
+        "p": 1.0,
+        "pass": true
+      },
+      {
+        "measure": "calculation exact",
+        "first": 6,
+        "second": 6,
+        "total": 6,
+        "second_only": 0,
+        "first_only": 0,
+        "p": 1.0,
+        "pass": true
+      },
+      {
+        "measure": "judge faithful*",
+        "first": 19,
+        "second": 22,
+        "total": 36,
+        "second_only": 3,
+        "first_only": 0,
+        "p": 0.25,
+        "pass": true
+      },
+      {
+        "measure": "passed (no error tag)",
+        "first": 9,
+        "second": 9,
+        "total": 36,
+        "second_only": 1,
+        "first_only": 1,
+        "p": 1.0,
+        "pass": true
+      }
+    ],
+    "tokens": {
+      "first": 333286,
+      "second": 314532,
+      "share": 0.05626999033862808,
+      "limit": 0.05,
+      "pass": false
+    },
+    "latency": {
+      "first_p50_ms": 4808.5,
+      "second_p50_ms": 5086.5,
+      "first_p95_ms": 10754,
+      "second_p95_ms": 9550
+    },
+    "parts": {
+      "search": true,
+      "counts": true,
+      "mcnemar": true,
+      "tokens": false
+    },
+    "pass": false,
+    "questions_changed": 21,
+    "n": 36
+  },
+  "pass": false
+}

@@ -1,0 +1,170 @@
+# Review of the automatic error tags for run r20261107T174057Z (hybrid k5, judge j2).
+# For each failure: read it with
+#     python -m eval.report r20261107T174057Z --show QID
+# then set `tag` to the primary tag you think is right, or "pass" if it didn't fail, and add
+# a short note when you change it. Don't edit `id` or `auto`.
+# Tags for answerable questions, in the order they are checked: retrieval_miss, over_abstention, wrong_reg, status_error, tool_misuse, calculation_error, memory_leak, unsupported_claim, wrong_citation, partial_retrieval, incomplete.
+# For declines: missed_abstention, then memory_leak, then unsupported_claim.
+# Check any time: python -m eval.report r20261107T174057Z  (it says how many are reviewed)
+
+[[review]]
+id = "q011"  # A customer says her roommate took her credit card from …
+auto = "retrieval_miss"  # also: unsupported_claim, tool_misuse
+tag = "retrieval_miss"
+note = "retrieval_miss confirmed: no passage holds 1026.12(b)(1)(i) or its comments; the unneeded call also invented notice_date 2026-11-03"
+
+[[review]]
+id = "q012"  # A customer says a hotel charged her credit card $480 …
+auto = "retrieval_miss"  # also: tool_misuse
+tag = "retrieval_miss"
+note = "retrieval_miss confirmed: no passage holds 1026.13(c); the deadlines came from the tool (another route, so the tag stays); the call also invented cycle_closing_dates"
+
+[[review]]
+id = "q013"  # A customer used our bank-issued credit card to purchase a …
+auto = "unsupported_claim"
+tag = "pass"
+note = "supported after all: passage 2 is § 1026.12(c) itself, and its (c)(1) trigger (merchant fails to resolve a dispute over goods bought with the card) matches the question's facts"
+
+[[review]]
+id = "q014"  # A customer opened a checking account with us on 1 …
+auto = "tool_misuse"
+tag = "tool_misuse"
+note = "invented statement_sent (2026-10-28, the notice date); the question gives no statement date"
+
+[[review]]
+id = "q015"  # A new customer received a credit card with a $500 …
+auto = "unsupported_claim"  # also: wrong_citation, partial_retrieval
+tag = "wrong_citation"
+note = "not a claim: the flagged sentences only say the passages don't cover the replacement fee; next real tag: § 1026.52(a)(1) cited from memory for the 25% rule, caught by the guard"
+
+[[review]]
+id = "q019"  # A checking-account customer wants us to stop her insurance company's …
+auto = "tool_misuse"
+tag = "unsupported_claim"
+note = "business-day claim: 'well before ... so the institution must honor' asserts the 3-business-day condition is met with no tool result (j2); the unneeded call is also real"
+
+[[review]]
+id = "q021"  # Our bank is developing a store-branded gift card that can …
+auto = "unsupported_claim"  # also: wrong_citation, partial_retrieval, tool_misuse
+tag = "unsupported_claim"
+note = "names § 1005.20(d) as governing the maintenance fee, which no passage says; 1005.20(a)(2) also cited from memory, caught by the guard"
+
+[[review]]
+id = "q022"  # Our bank is developing a prepaid card that would allow …
+auto = "partial_retrieval"
+tag = "partial_retrieval"
+note = "key fact 3 (30-day wait after registration) is absent; 1026.61(c)(1) was not retrieved"
+
+[[review]]
+id = "q026"  # A credit-card customer was charged a late-payment fee in October …
+auto = "missed_abstention"  # also: unsupported_claim
+tag = "unsupported_claim"
+note = "declines in text (rule not in force, so no refund), but not flag-only: calls the $8 safe harbor 'currently in force' and $25/$35 operative, the latter only in vacated comment 52(b)(1)(ii)-4 (passage 3)"
+
+[[review]]
+id = "q027"  # Our bank is redesigning the overdraft-fee structure for its checking …
+auto = "retrieval_miss"  # also: wrong_reg, status_error, unsupported_claim, wrong_citation
+tag = "retrieval_miss"
+note = "retrieval_miss confirmed: comment 17(b)-9 refers to the (b)(1) prohibition but no passage holds its text; wrong_reg and status_error not real (1026.62(c) cited to say it never took effect)"
+
+[[review]]
+id = "q029"  # A customer contacts us about a personal installment loan issued …
+auto = "unsupported_claim"
+tag = "unsupported_claim"
+note = "no passage or header says an installment loan is closed-end or that Subpart C governs; the in-corpus candidates 1026.1(d)(3) and 1026.2(a)(10) were not given"
+
+[[review]]
+id = "q030"  # Our bank is about to charge its standard credit-card interest …
+auto = "memory_leak"
+tag = "memory_leak"
+note = "names the SCRA and states its 6% cap"
+
+[[review]]
+id = "q033"  # A customer sees a $73.40 charge described as "SQ *BLUEHARBOR" …
+auto = "unsupported_claim"  # also: wrong_citation, partial_retrieval
+tag = "unsupported_claim"
+note = "core conclusion has no passage support and contradicts 1026.13(a)(6), which was not retrieved; § 1026.13(a) also cited from memory, caught by the guard"
+
+[[review]]
+id = "q035"  # Our bank transferred $300 from a customer's savings account to …
+auto = "wrong_citation"
+tag = "wrong_citation"
+note = "caught by the guard: § 1026.12(d)(1) cited from memory as support for the core prohibition; only its comments were given (passage 3)"
+
+[[review]]
+id = "q036"  # A customer's credit card and its PIN were stolen on …
+auto = "retrieval_miss"  # also: unsupported_claim
+tag = "retrieval_miss"
+note = "retrieval_miss confirmed: comment 12(a)-5 restates only 1005.12(a)(1)(iv), and 1026.12(b)(1) is absent; also real: 'the same day as the theft' contradicts the question (7 vs 8 Nov)"
+
+[[review]]
+id = "q037"  # Our bank plans to add an overdraft line of credit …
+auto = "retrieval_miss"
+tag = "retrieval_miss"
+note = "retrieval_miss confirmed: neither 1026.12(a)(1) nor 1005.12(a)(2)(i) was given; the answer covers only the Reg E opt-in"
+
+[[review]]
+id = "q039"  # A customer was charged a $34 overdraft fee when a …
+auto = "retrieval_miss"  # also: wrong_citation
+tag = "retrieval_miss"
+note = "retrieval_miss confirmed: comments 17(b)-1/-2 restate the fee ban without (b)(1)'s opt-in conditions (correct by another route); next tag would be wrong_citation, caught by the guard"
+
+[[review]]
+id = "q041"  # Our dispute team is reviewing a cardholder's dispute involving a …
+auto = "memory_leak"  # also: unsupported_claim
+tag = "unsupported_claim"
+note = "not a leak: 'Visa's network rules' repeats the question; 'Reg Z does not impose a specific time limit' is scoped wider than passage 1, and comment 12(c)-1 (passage 3) ends the right once paid"
+
+[[review]]
+id = "q043"  # A customer purchased a store gift card issued by our …
+auto = "unsupported_claim"
+tag = "memory_leak"
+note = "names state unclaimed property law as governing escheatment (the guide's own example); the keywords filed it under unsupported_claim"
+
+[[review]]
+id = "q047"  # A customer first notified our bank on Monday, 14 December …
+auto = "tool_misuse"  # also: wrong_citation, partial_retrieval
+tag = "tool_misuse"
+note = "label stands: a debit after a cancelled membership with a liability question is 'unauthorized' (gold 1005.6(b)(3)); the model passed 'error' and added transfer_kind"
+
+[[review]]
+id = "q050"  # A former credit-card customer returned a $260 jacket after paying …
+auto = "unsupported_claim"  # also: incomplete
+tag = "unsupported_claim"
+note = "applies § 1026.11(a)(2)'s written-request 7-business-day rule to her phone call"
+
+[[review]]
+id = "q051"  # Our credit-card team proposes charging interest on the portion of …
+auto = "retrieval_miss"
+tag = "retrieval_miss"
+note = "retrieval_miss confirmed: comments 54(a)(1)-2 and -6 apply (a)(1)(ii) in examples but don't hold its text (correct by another route); no other real tag"
+
+[[review]]
+id = "q055"  # A customer's utility company makes a monthly automatic ACH debit …
+auto = "retrieval_miss"  # also: over_abstention, memory_leak
+tag = "retrieval_miss"
+note = "retrieval_miss confirmed: 1005.10(d) not given; the over_abstention (model) and the NACHA leak are also real"
+
+[[review]]
+id = "q056"  # Our card issuer's pricing team wants to reduce its credit-card …
+auto = "missed_abstention"
+tag = "unsupported_claim"
+note = "declines in text (cannot rely on the $8 amount), but not flag-only: presents $25/$35 as the operative safe harbors, from vacated comment 52(b)(1)(ii)-4 (passage 2)"
+
+[[review]]
+id = "q057"  # A customer travelling abroad has lost her Mastercard and wants …
+auto = "memory_leak"
+tag = "memory_leak"
+note = "adds that Mastercard's network rules govern; the question names only the card and the network"
+
+[[review]]
+id = "q058"  # Our marketing team has prepared a new credit-card promotional mailer …
+auto = "unsupported_claim"
+tag = "pass"
+note = "not a claim: both flagged sentences decline a sign-off (j2 excludes); its three citations came from memory, caught by the guard, but wrong_citation isn't a decline tag"
+
+[[review]]
+id = "q059"  # A checking-account customer reports that someone forged her signature on …
+auto = "memory_leak"  # also: unsupported_claim
+tag = "memory_leak"
+note = "names the UCC and state law as governing forged-check liability; the question names neither"
