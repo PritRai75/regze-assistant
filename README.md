@@ -66,7 +66,7 @@ MCP server (stdio): one tool, ask_card_rules, calling the API
 - **Rules not in force.** The eCFR still prints two 2024 rules that never took effect (one vacated by a court, one overturned by Congress). A hand-checked register marks the 86 affected provisions, and every passage carries its status.
 - **Citation guard.** A citation that isn't in the passages or a tool result is removed and flagged; an answer left with no valid citation becomes a decline.
 - **Evaluation.** 60 questions (24 dev, 36 test), code checks for search, citations, abstention, tool calls and calculations, an LLM judge (Claude Sonnet 4.5) for faithfulness and key facts, and the author's review of every failure. Tuning used dev only; the test split ran once.
-- **CI.** 714 tests and a dev search check, with no AWS credentials, on every push.
+- **CI.** 714 tests and a dev search check, with no AWS credentials, on every push and pull request. `main` accepts changes only through a pull request whose checks pass, and the search check was shown failing on a deliberately broken change ([PR #1](https://github.com/PritRai75/regze-assistant/pull/1)).
 
 ## What it gets wrong
 
@@ -116,3 +116,7 @@ The deployed API needs a key, which isn't public, so to call it deploy your own 
 ## Disclaimer
 
 General information from 12 CFR Parts 1005 and 1026 as of the date shown, not legal or compliance advice. Card network rules, state law and an issuer's own account terms are out of scope and may give a customer more protection. US federal regulations are not under copyright, so the regulation text is included in this repository.
+
+## License
+
+The code is released under the [MIT License](LICENSE). The regulation text in `corpus/`, and the passages taken from it in `index/`, comes from the eCFR and is included as published; the MIT License doesn't cover it.
